@@ -1,0 +1,59 @@
+.body{
+    margin: 0;
+    padding: 0;
+}
+
+img .rental-logo{
+    width: 500px;
+    height: auto;
+    position: absolute;
+    top: 8em;
+    left: 30%
+}
+
+.searchbar #search{
+    position: absolute;
+    width: 50%;
+    height: 53px;
+    top: 10em;
+    left: 25%;
+    border-radius: 5px ;
+    border-style: none;
+    font-size: 30px;
+}
+
+.searchbar .icon{
+    position: absolute;
+    top: 19.3em;
+    left: 72%;
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.searchbar .icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #f7f7f7;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease;
+    z-index: -1; /* Place the background behind the icon */
+}
+
+.searchbar .icon:hover::before {
+    transform: translate(-50%, -50%) scale(2.5);
+}
+
+/*.searchbar .icon:hover{
+    background-color: rgb(247, 247, 247);
+    transform: scale(1.2); /* Increase the scale for width and height *
+    border-radius: 5px; /* Optionally, keep the border-radius consistent *
+}*/
