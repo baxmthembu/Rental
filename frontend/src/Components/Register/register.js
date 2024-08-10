@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,use } from "react";
+import {useNavigate} from 'react-router-dom'
 import './register.css';
 import Axios from 'axios';
 import IsValidate from "../Validate/validate";
@@ -14,6 +15,7 @@ const Register = () => {
         password2: ''
     })
     const [errorMessage, setErrorMessage] = useState('')
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -31,6 +33,7 @@ const Register = () => {
 
                 if(response.status === 200){
                     console.log('Register Successful')
+                    navigate('/login')
                 }else{
                     console.error('Registration Failure')
                 }
@@ -71,7 +74,7 @@ const Register = () => {
                         {errorMessage && <div className="error-message">{errorMessage}</div>}
                     </div>
                     <div className="form-container">
-                        <p><input type="checkbox" className="icon" style={{cursor: 'pointer'}}/>I agree all statements in <a href="/home">Terms of service</a></p>
+                        <p><input type="checkbox" className="icon" style={{cursor: 'pointer'}}/>I agree all statements in <a href="/home" className="a">Terms of service</a></p>
                     </div>
                     <div className="button">
                         <button type="submit" className="submit">Submit</button>

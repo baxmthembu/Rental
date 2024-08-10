@@ -62,7 +62,7 @@ form{
 .register-form .form-container{
     position: relative;
     left: 5rem;
-    top: 35%
+    top: 30%
 }
 
 .form-container .icon{
@@ -81,16 +81,17 @@ form{
 .header{
     position: inherit;
     left: 14%;
-    top: 20%
+    top: 12%
 }
 
 .error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
+    padding: 15px;
 }
 
-a{
+.a{
     text-decoration: none;
     color:aquamarine
 }
@@ -98,7 +99,7 @@ a{
 .button{
     align-items: center;
     position: relative;
-    top: 10em;
+    top: 8em;
     left: 13%
 }
 

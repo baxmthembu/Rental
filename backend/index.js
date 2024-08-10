@@ -18,11 +18,11 @@ const { extname } = require('path');
 app.use(json())
 app.use(urlencoded({ extended: false }));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3003',
   credentials: true
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -63,6 +63,7 @@ const db = knex({
          name: name,
          email: email,
          password: hashedPassword, // Store the hashed password
+         role: 'owner'
         });
    
        console.log('Registration successful');
@@ -72,6 +73,43 @@ const db = knex({
        return res.status(500).json({ msg: 'An error occurred' });
      }
   })
+
+  app.post('/login', async (req, res) => {
+    const { name, password } = req.body;
+  
+    if (!name || !password) {
+      return res.status(400).json({ msg: 'Please provide both name and password' });
+    }
+  
+  
+    try {
+      const user = await db('users')
+        .select('id','name','password')
+        .where('name', name) // Simplified for demo purposes, use hashed passwords in production
+        .first();
+        
+  
+      const isPasswordValid = await compare(password, user.password);
+  
+      if (isPasswordValid) {
+          res.json({
+          msg: 'Authentication Successful',
+          user: {
+            id: user.id,
+            name: user.name,
+            role: 'owner',
+            // Add other user details if needed
+          }
+        });
+        console.log('Logged in Successfully')
+      } else {
+        res.status(401).json({ msg: 'Invalid Credentials' });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 const port = 3001
 app.listen(port, () => {
