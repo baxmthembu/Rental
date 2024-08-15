@@ -1,0 +1,118 @@
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+    top: -20rem;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out;
+    position: relative; /* Ensures overlay is positioned within the card */
+}
+
+.cards:hover {
+    transform: translateY(-5px);
+}
+
+.property_images {
+    width: 150px;
+    height: auto;
+    object-fit: cover;
+}
+
+.cards-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.property_prices {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.property_descriptions {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.property_addresses {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.property_detail {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.property_detail_items {
+    font-size: 14px;
+    color: #777;
+    display: flex;
+    align-items: center;
+}
+
+.property_detail_icons {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.cards-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1; /* Ensure overlay appears above content */
+}
+
+.cards:hover .cards-overlay {
+    opacity: 1;
+}
+
+.delete-button {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}

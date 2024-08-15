@@ -1,9 +1,9 @@
 .register-logo img{
-    width: 300px;
+    width: 600px;
     height: auto;
     position: absolute;
-    top: 10em;
-    left: 60%;
+    top: -4em;
+    left: 40%;
 }
 
 
@@ -26,7 +26,7 @@
     align-items: center;
 }
 
-form{
+.form{
     background-color: white;
     height: 30rem;
     width: 150%;

@@ -6,6 +6,7 @@ import IsValidate from "../Validate/validate";
 
 
 const logo = require('../Images/logo.png')
+const image = require('../Images/coconut ..png')
 
 const Register = () => {
     const [formData ,setFormData] = useState({
@@ -51,9 +52,9 @@ const Register = () => {
             <div className='register-container'>
             <div className="register-form">
                 <h1>Sign Up</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="form">
                     <div className="register-logo">
-                        <img src={logo} className='register-logo' />
+                        <img src={image} className='register-logo' />
                     </div>
                     <h1 className="header">Sign up</h1>
                     <div className="form-container">

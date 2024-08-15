@@ -33,7 +33,8 @@
     width: 100%;
     text-align: center;
     position: relative;
-    left: 24%
+    left: 30%;
+    top: -22rem
 }
 
 .header h1 {

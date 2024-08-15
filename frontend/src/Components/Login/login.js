@@ -5,6 +5,7 @@ import { WorkerContext } from "../WorkerContext";
 import { useNavigate } from "react-router-dom";
 
 const logo = require('../Images/logo.png')
+const image = require('../Images/coconut ..png')
 
 
 const Login = () => {
@@ -29,7 +30,7 @@ const Login = () => {
                     const workerId = response.data.user.id;
                     localStorage.setItem('workerId', workerId)
                     setWorker({id: workerId, role:'owner'})
-                    navigate('/home')
+                    navigate('/searchbar')
                 }else{
                     console.error('Authentification failure')
                 }
@@ -51,10 +52,9 @@ const Login = () => {
         <div>
             <div className='register-container'>
             <div className="register-form">
-                <h1>Sign in</h1>
-                <form onSubmit={ProceedLogin}>
+                <form onSubmit={ProceedLogin} className="form">
                     <div className="register-logo">
-                        <img src={logo} className='register-logo' />
+                        <img src={image} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} />
                     </div>
                     <h1 className="header">Sign in</h1>
                     <div className="form-container">
@@ -66,7 +66,7 @@ const Login = () => {
                         <input value={formData.password} onChange={handleChange} type="password" name="password" placeholder="Enter password" />
                     </div>
                     <div className="form-container">
-                        <p><input type="checkbox" className="icon" style={{cursor: 'pointer'}}/>I agree all statements in <a href="/home">Terms of service</a></p>
+                        <p><input type="checkbox" className="icon" style={{cursor: 'pointer'}}/>I agree all statements in <a href="/home" style={{textDecoration:'none',color:'blue'}}>Terms of service</a></p>
                     </div>
                     <div className="button">
                         <button type="submit" className="submit">Submit</button>

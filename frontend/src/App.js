@@ -7,6 +7,8 @@ import { WorkerProvider } from "./Components/WorkerContext";
 import Login from "./Components/Login/login";
 import NavBar from "./Components/Navbar/navbar";
 import Home from "./Components/Home/home";
+import Card from "./Components/Cards/card";
+import Properties from "./Components/Properties/properties";
 
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/navbar" element={<NavBar />} />
           <Route path="/home" element={<Home />} />
+          <Route path='/card' element={<Card />} />
+          <Route path='/properties' element={<Properties />} />
         </Routes>
         </WorkerProvider>
       </div>
