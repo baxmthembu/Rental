@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import './properties.css'
+import './properties.css';
+//import Logout from '../Logout/logout';
 
 const image = require('../Images/coconut ..png')
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentImageIndex, setCurrentImageIndex] = useState({});
+
 
     useEffect(() => {
         const fetchProperties = async () => {
-            const workerId = localStorage.getItem('workerId'); // Get the logged-in user's ID
-            try {
+            const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
+            /*try {
                 const response = await Axios.get(`http://localhost:3001/properties/${workerId}`);
                 if (response.status === 200) {
-                    setProperties(response.data);
+                    const processedWorkersData = response.map(worker => ({
+                        ...worker,
+                        image_url: worker.image_url.split(','), // Convert the comma-separated string to an array
+                    }));    
+                    setProperties(processedWorkersData);
                 } else {
                     console.error('Failed to fetch properties');
                 }
@@ -22,7 +29,31 @@ const Properties = () => {
                 console.error('An error occurred while fetching properties:', error);
             } finally {
                 setIsLoading(false);
+            }*/
+           try{
+                const response = await fetch(`http://localhost:3001/properties/${userId}`, {
+                    headers: {
+                        'Content-type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+
+                const usersJson = await response.json();
+                const processedUsersData = usersJson.map(user => ({
+                    ...user,
+                    image_url: user.image_url.split(','), // Convert the comma-separated string to an array
+                }));
+
+                setProperties(processedUsersData);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
             }
+
+
         };
 
         fetchProperties();
@@ -44,9 +75,23 @@ const Properties = () => {
         }
     };
 
-    if (isLoading) {
-        return <p>Loading properties...</p>;
-    }
+    
+
+    const handleNextImage = (userId) => {
+        setCurrentImageIndex((prevState) => ({
+            ...prevState,
+            [userId]: ((prevState[userId] || 0) + 1) % properties.find(user => user.id === userId).image_url.length,
+        }));
+    };
+
+    const handlePrevImage = (userId) => {
+        setCurrentImageIndex((prevState) => ({
+            ...prevState,
+            [userId]: (prevState[userId] - 1 + properties.find(user => user.id === userId).image_url.length) 
+            % properties.find(user => user.id === userId).image_url.length,
+        }));
+    };
+
 
     return (
         <>
@@ -55,13 +100,23 @@ const Properties = () => {
                 <img src={image} alt="rental" style={{position:'relative', top:'-12em', left:'-8%', textAlign:'right'}}/>
             </div>
         </header>
+        {/*<Logout />*/}
         <div>
             <h1 style={{position:'absolute', top:'20%', left:'35%'}}>Your Listed Properties</h1>
             <div className="cards-container" style={{top:'-13rem'}}>
                 {properties.length > 0 ? (
                     properties.map(property => (
                         <div key={property.id} className="cards">
-                            <img src={property.image_url} alt={property.description} className="property_images" />
+                            <div className="carousel">
+                                <button className="prev" onClick={() => handlePrevImage(property.id)}>❮</button>
+                                <img
+                                    src={property.image_url[currentImageIndex[property.id] || 0]}
+                                    alt="Property"
+                                    className="property_images"
+                                />
+                                <button className="next" onClick={() => handleNextImage(property.id)}>❯</button>
+                            </div>
+                            {/*<img src={property.image_url[currentImageIndex[property.id || 0]]} alt={property.description} className="property_images" />*/}
                             <div className="cards-content">
                             <div className="property_prices">R {property.price}</div>
                             <div className="property_addresses">{property.address}</div>

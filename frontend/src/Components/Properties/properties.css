@@ -10,7 +10,7 @@
 .cards {
     display: flex;
     flex-direction: row;
-    width: 400px;
+    width: 500px;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
@@ -24,9 +24,9 @@
     transform: translateY(-5px);
 }
 
-.property_images {
-    width: 150px;
-    height: auto;
+.carousel .property_images {
+    width: 180px;
+    height: 100%;
     object-fit: cover;
 }
 

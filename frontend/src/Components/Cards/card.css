@@ -10,7 +10,7 @@
 .card {
     display: flex;
     flex-direction: row;
-    width: 400px;
+    width: 500px;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
@@ -23,9 +23,9 @@
     transform: translateY(-5px);
 }
 
-.property_image {
-    width: 150px;
-    height: auto;
+.carousel .property_image {
+    width: 170px;
+    height: 90%;
     object-fit: cover;
 }
 
@@ -97,4 +97,35 @@
     display: flex;
     gap: 5px;
     color:rgba(0, 0, 0, 0.1)
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel img {
+    width: 100%;
+    height: auto;
+}
+
+.carousel .prev, .carousel .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.carousel .prev {
+    left: 0;
+}
+
+.carousel .next {
+    right: 0;
 }

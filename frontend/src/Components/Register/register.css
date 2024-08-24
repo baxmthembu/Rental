@@ -93,14 +93,14 @@
 
 .a{
     text-decoration: none;
-    color:aquamarine
+    color: blue
 }
 
 .button{
     align-items: center;
     position: relative;
-    top: 8em;
-    left: 13%
+    top: 9em;
+    left: 14%
 }
 
 /* Specificity increased for the button inside .register-form */
@@ -119,3 +119,23 @@
 .register-form .submit:hover {
     background-color: #0056b3; /* Darker shade on hover */
 }
+
+.error-message {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 0.5em;
+    position: relative;
+    left: 1rem
+}
+
+.register-link{
+    text-decoration: none;
+    color: blue
+}
+
+.recaptcha{
+    position: relative;
+    top: 8rem;
+    left: 5rem
+}
+ 
