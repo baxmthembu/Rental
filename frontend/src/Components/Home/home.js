@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import Axios from 'axios';
 //import Logout from '../Logout/logout'
+import Logout from '../Logout/logout';
 import './home.css';
 
 const Home = () => {
@@ -98,7 +99,7 @@ const Home = () => {
                     </Link>
                 </div>
             </header>
-            {/*<Logout />*/}
+            <Logout />
             <div>
                 <form onSubmit={Submit}>
                     <div className="containers">

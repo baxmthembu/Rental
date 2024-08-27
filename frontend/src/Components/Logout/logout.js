@@ -1,4 +1,4 @@
-/*import React, { useContext } from 'react';
+import React, { useContext } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { WorkerContext } from '../WorkerContext';
@@ -7,13 +7,14 @@ import { useAuth } from '../../provider/authProvider';
 
 const Logout = () => {
     const { user, setUser } = useContext(WorkerContext);
-    const {token,setToken} = useAuth();
+    const {setToken} = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
             if (!user || !user.id) {
-                throw new Error('No user is logged in');
+                console.log('No user logged in')
+                return;
             }
 
             // Send the logout request to the server
@@ -24,10 +25,14 @@ const Logout = () => {
             if (response.status === 200) {
                 // Clear user context and localStorage only after successful logout
                 setUser(null);
-                setToken(null)
+                setToken(null);
                 localStorage.removeItem('userId');
-                localStorage.removeItem('token')
-                navigate('/login');
+                localStorage.removeItem('token');
+                // Navigate to a dummy route and then to login to force re-render
+                navigate('/dummy');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 0);
             } else {
                 throw new Error('Failed to logout');
             }
@@ -38,7 +43,7 @@ const Logout = () => {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button className="button-28" role="button" onClick={handleLogout}>
+            <button className="button-28" onClick={handleLogout}>
                 Logout
             </button>
         </div>
@@ -46,12 +51,12 @@ const Logout = () => {
 };
 
 
-const styles = {
+/*const styles = {
     button: {
         float: 'right',
         right: '20px',
         bottom: '1rem'
     }
-  }
+  }*/
 
-  export default Logout*/
+  export default Logout

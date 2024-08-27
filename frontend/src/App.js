@@ -61,7 +61,9 @@ export default App*/
 function App(){
   return (
     <AuthProvider>
+      <WorkerProvider>
       <Routes />
+      </WorkerProvider>
     </AuthProvider>
   )
 }

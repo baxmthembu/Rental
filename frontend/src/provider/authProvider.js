@@ -29,6 +29,18 @@ const AuthProvider = ({children}) => {
         }
     }, [token]);
 
+    /*useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.removeItem('token'); // Remove token when the page or website closes
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);*/
+
     //context value includes the token and setToken function
     //the token value is used as a dependency for memoization
     const contextValue = useMemo(() => ({

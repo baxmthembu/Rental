@@ -13,9 +13,15 @@ const WorkerProvider = ({ children }) => {
   }, []);
 
   const updateUser = (newUser) => {
-    console.log('Setting worker:', newUser);  // Add this line to log user info
-    setUser(newUser);
-    localStorage.setItem('userId', newUser.id); // Update localStorage when user is set
+    if(newUser){
+      console.log('Setting worker:', newUser)
+      setUser(newUser)
+      localStorage.setItem('userId', newUser.id)
+    }else{
+      console.log('clearing worker')
+      setUser(null)
+      localStorage.removeItem('userId')
+    }
   };
 
 

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Axios from "axios";
 //import Validate from "../Validate/workervalidate";
-//import { WorkerContext } from "../WorkerContext";
+import { WorkerContext } from "../WorkerContext";
 import { useNavigate, Link } from "react-router-dom";
 import DOMPurify from 'dompurify';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -13,7 +13,7 @@ const image = require('../Images/coconut ..png')
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
-    //const {setUser} = useContext(WorkerContext)
+    const {setUser} = useContext(WorkerContext)
     const {setToken} = useAuth()
     const [formData, setFormData] = useState({
         name: '',
@@ -81,11 +81,11 @@ const Login = () => {
 
                 if(response.status === 200){
                     console.log('logged in')
-                    //const userId = response.data.user.id;
+                    const userId = response.data.user.id;
                     const token = response.data.user.token
-                    //localStorage.setItem('userId', userId)
+                    localStorage.setItem('userId', userId)
                     localStorage.setItem('token', 'Bearer ' + token)
-                    //setUser({id: userId, role:'owner'})
+                    setUser({id: userId, role:'owner'})
                     setToken(token)
                     navigate('/searchbar',{ replace: true })
                 }

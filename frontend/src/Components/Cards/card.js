@@ -22,6 +22,7 @@ const Card = () => {
                     headers: {
                         'Content-type': 'application/json',
                         Accept: 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include the token here
                     },
                 });
 

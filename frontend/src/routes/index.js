@@ -48,8 +48,14 @@ const Routes = () => {
         {
             path: "/register",
             element: <Register />
-        }
+        },
     ]
+
+    // Catch-all route to handle 404s
+    const catchAllRoute = {
+        path: "*",
+        element: token ? <Home /> : <Login />  // Redirect based on authentication state
+    };
 
     //createBrowserRouter function is used to create the router configuration. It takes an array of routes as its argument
     //the spread operator (...) is used to merge the route arrays into a single array
@@ -57,6 +63,7 @@ const Routes = () => {
     const router = createBrowserRouter([
         ...(!token ? routesForNotAuthenticatedOnly : []),
         ...routesForAuthenticatedOnly,
+        catchAllRoute
     ])
 
     return <RouterProvider router={router} />

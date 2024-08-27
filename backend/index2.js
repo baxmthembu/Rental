@@ -81,7 +81,7 @@ const loginLimiter = rateLimit({
 });
 
 const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization').split(' ')[1];
+  const token = req.headers['Authorization']/*.split(' ')[1];*/
   
   if (!token) return res.sendStatus(401)
 
@@ -242,7 +242,7 @@ app.post('/login',  [
   }
 });
 
-app.get('/property', authenticateToken, async (req, res) => {
+app.get('/property', async (req, res) => {
   try {
     const { address } = req.query;
     let data;
@@ -297,7 +297,7 @@ app.delete('/properties/:propertyId', authenticateToken, async (req, res) => {
   }
 });
 
-app.post('/logout', authenticateToken, async (req, res) => {
+app.post('/logout', async (req, res) => {
   const { userId } = req.body;
   const id = parseInt(userId, 10);
 
