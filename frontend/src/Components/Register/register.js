@@ -40,7 +40,7 @@ const Register = () => {
                 if(response.status === 200){
                     console.log('Register Successful')
                     navigate('/login')
-                    alert('Registration successful! Please check your email to verify your account.');
+                    alert('Registration successful!');
                     
                 }else{
                     console.error('Registration Failure')

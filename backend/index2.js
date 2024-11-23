@@ -98,7 +98,7 @@ app.get('/protected', authenticateToken, (req, res) => {
 });
 
 // Register route with input validation
-app.post('/register',authenticateToken, [
+app.post('/register', [
   check('name').isLength({ min: 3 }).trim().escape(),
   check('email').isEmail().normalizeEmail(),
   check('password').isLength({ min: 6 }).trim().escape(),
@@ -135,13 +135,11 @@ app.post('/register',authenticateToken, [
   }
 });
 
-
-// Property info route with input validation
-app.post('/property_info', authenticateToken, [
+app.post('/property_info', [
   /*check('users_id').isInt(),*/
   check('address').trim().escape(),
-  check('bedrooms').trim().escape(),
-  check('bathrooms').trim().escape(),
+  /*check('bedrooms').isInt(),
+  check('bathrooms').isInt(),*/
   check('price').trim().escape(),
   check('description').trim().escape(),
   check('property_type').trim().escape(),
@@ -153,7 +151,7 @@ app.post('/property_info', authenticateToken, [
 
   console.log("Received Data:", req.body);
 
-  const { users_id, address, bedrooms, bathrooms, price, description, property_type } = req.body;
+  const { users_id, address, bedrooms, bathrooms, price, description, phone_number, email, property_type } = req.body;
   const images = req.files;
 
   try {
@@ -163,18 +161,44 @@ app.post('/property_info', authenticateToken, [
 
     const imageUrls = images.map(file => file.path);
 
+    // Fetch the user's name based on users_id
+    const userResult = await db('users').select('name').where({ id: users_id }).first();
+    
+    if (!userResult) {
+      return res.status(400).json({ msg: 'User not found' });
+    }
+
+    const userName = userResult.name;
+
+    const bedroomsInt = parseInt(bedrooms, 10);
+    const bathroomsInt = parseInt(bathrooms, 10);
+
+    if (isNaN(bedroomsInt) || isNaN(bathroomsInt)) {
+      throw new Error('Invalid input for bedrooms or bathrooms');
+    }
+
+    if (!users_id || !address || isNaN(bedroomsInt) || isNaN(bathroomsInt) || !price || !description) {
+      return res.status(400).json({ msg: 'Invalid or missing input data' });
+    }
+
+
+    // Insert the data into property_info, including the fetched name
     await db('property_info').insert({
       users_id,
       address,
-      bedrooms,
-      bathrooms,
+      bedrooms: bathrooms,
+      bathrooms: bathroomsInt,
       price,
       description,
       property_type,
       image_url: imageUrls.join(','),
-    });
+      phone_number,
+      email,
+      name: userName,
+    });  
 
     console.log('Sent property info successfully');
+    console.log({ users_id, address, bedrooms, bathrooms, price, description, property_type });
     return res.json({ msg: 'Property info sent' });
   } catch (error) {
     console.error('Error:', error);
@@ -182,6 +206,8 @@ app.post('/property_info', authenticateToken, [
   }
 });
 
+
+// Property info route with input validation
 app.post('/login',  [
   check('name').isLength({ min: 3 }).trim().escape(),
   check('password').isLength({ min: 6 }).trim(),
@@ -260,7 +286,7 @@ app.get('/property', async (req, res) => {
   }
 });
 
-app.get('/properties/:userId', authenticateToken, async (req, res) => {
+app.get('/properties/:userId',  async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
 
   if (isNaN(userId)) {
@@ -276,7 +302,7 @@ app.get('/properties/:userId', authenticateToken, async (req, res) => {
   }
 });
 
-app.delete('/properties/:propertyId', authenticateToken, async (req, res) => {
+app.delete('/properties/:propertyId',  async (req, res) => {
   const propertyId = parseInt(req.params.propertyId, 10);
 
   if (isNaN(propertyId)) {

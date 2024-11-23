@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import Logout from '../Logout/logout';
+import './home.css';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import Axios from 'axios';
-//import Logout from '../Logout/logout'
-import Logout from '../Logout/logout';
-import './home.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const [formData, setFormData] = useState({
@@ -13,23 +14,27 @@ const Home = () => {
         bathrooms: '',
         price: '',
         description: '',
-        property_type: ''
+        phone_number: '',
+        email: '',
+        property_type: '',
     });
     const [file, setFile] = useState([]);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // Spinner state
     const navigate = useNavigate();
 
-    const image = require("../Images/coconut ..png")
+    const image = require("../Images/coconut ..png");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Sanitize input to prevent malicious code
         const sanitizedValue = DOMPurify.sanitize(value);
-        setFormData({ ...formData, [name]: sanitizedValue });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: name === 'bedrooms' || name === 'bathrooms' ? parseInt(sanitizedValue, 10) || '' : sanitizedValue, // Parse numeric fields
+        }));
     };
 
     const handleImageChange = (e) => {
-        // Validate and sanitize file input
         const files = Array.from(e.target.files);
         const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
         const maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -46,7 +51,7 @@ const Home = () => {
         }
 
         setFile(files);
-        setError(''); // Clear error if files are valid
+        setError('');
     };
 
     const Submit = async (e) => {
@@ -57,36 +62,45 @@ const Home = () => {
             return;
         }
 
-        const userId = localStorage.getItem('workerId');
-
+        const userId = localStorage.getItem('userId');
         const formDataWithFile = new FormData();
-        formDataWithFile.append('users_id', userId); // Include the user ID
+        formDataWithFile.append('users_id', userId);
         formDataWithFile.append('address', formData.address);
-        formDataWithFile.append('bedrooms', formData.bedrooms);
-        formDataWithFile.append('bathrooms', formData.bathrooms);
+        formDataWithFile.append('bedrooms', parseInt(formData.bedrooms, 10));
+        formDataWithFile.append('bathrooms', parseInt(formData.bathrooms, 10));
         formDataWithFile.append('price', formData.price);
         formDataWithFile.append('description', formData.description);
+        formDataWithFile.append('phone_number', formData.phone_number);
+        formDataWithFile.append('email', formData.email);
         formDataWithFile.append('property_type', formData.property_type);
 
-        // Append each file to the form data
         file.forEach((file) => {
             formDataWithFile.append('images', file);
         });
 
+        setLoading(true); // Start spinner
         try {
             const response = await Axios.post('http://localhost:3001/property_info', formDataWithFile, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
+
+            if (isNaN(formData.bedrooms) || isNaN(formData.bathrooms)) {
+                setError('Please select valid numbers for bedrooms and bathrooms.');
+                return;
+            }            
+
             if (response.status === 200) {
-                console.log('Form sent');
-                navigate('/searchbar');
+                toast.success("Form Submitted Successfully");
+                setTimeout(() => {
+                    navigate('/card')
+                }, "5000");
             } else {
-                console.error('Form not sent');
+                toast.error("Form Not Submitted");
             }
         } catch (error) {
-            console.error('An error occurred: ' + error);
+            toast.error('An error occurred while submitting the form.');
+        } finally {
+            setLoading(false); // Stop spinner
         }
     };
 
@@ -115,18 +129,18 @@ const Home = () => {
                                 <label>Bedrooms</label>
                                 <select id="type" name="bedrooms" onChange={handleChange} required>
                                     <option></option>
-                                    <option value="one">1</option>
-                                    <option value="two">2</option>
-                                    <option value="three">3+</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
                                 </select>
                             </div>
                             <div className="input">
                                 <label>Bathrooms</label>
                                 <select id="type" name="bathrooms" onChange={handleChange} required>
                                     <option></option>
-                                    <option value="one">1</option>
-                                    <option value="two">2</option>
-                                    <option value="three">3+</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
                                 </select>
                             </div>
                             <div className="input">
@@ -137,6 +151,14 @@ const Home = () => {
                                 <label>Description</label>
                                 <textarea rows="4" cols="50" placeholder="Describe the property" style={{ fontSize: '15px' }} name="description" onChange={handleChange}></textarea>
                             </div>
+                            <div className="input">
+                                <label>Phone Number</label>
+                                <input type='tel' name='phone_number' onChange={handleChange} required/>
+                            </div>   
+                            <div className="input">
+                                <label>Email</label>
+                                <input type='email' name='email' onChange={handleChange} required/>
+                            </div>              
                             <div className="input">
                                 <label>Property type</label>
                                 <select id="type" name="property_type" onChange={handleChange} required>
@@ -152,13 +174,17 @@ const Home = () => {
                         </div>
                         {error && <p style={{ color: 'red' }}>{error}</p>}
                         <div className="button-container">
-                            <button>Submit</button>
+                            <button type='submit' disabled={loading}>
+                                {loading ? 'Submitting...' : 'Submit'}
+                            </button>
+                            {loading && <div className="spinner">Loading...</div>}
                         </div>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
         </>
     );
-};
+}
 
 export default Home;

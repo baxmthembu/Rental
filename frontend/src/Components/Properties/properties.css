@@ -30,6 +30,17 @@
     object-fit: cover;
 }
 
+#head{
+    font-size: 80px;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-optical-sizing: auto;
+    letter-spacing: -.3rem;
+    text-decoration:none;
+    color: black;
+}
+
 .cards-content {
     padding: 15px;
     display: flex;

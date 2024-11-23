@@ -34,7 +34,7 @@
     text-align: center;
     position: relative;
     left: 30%;
-    top: -22rem
+    top: -29rem
 }
 
 .header h1 {
@@ -69,6 +69,8 @@
 }
 
 .input-container input[type="text"],
+.input-container input[type="tel"],
+.input-container input[type="email"],
 .input-container select {
     width: 100%;
     padding: 10px;

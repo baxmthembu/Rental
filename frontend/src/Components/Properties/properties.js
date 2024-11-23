@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Axios from 'axios';
 import './properties.css';
-//import Logout from '../Logout/logout';
+import Logout from '../Logout/logout';
+import Redirect from '../Reroute/redirect';
 
 const image = require('../Images/coconut ..png')
 
@@ -9,6 +11,7 @@ const Properties = () => {
     const [properties, setProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState({});
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -96,14 +99,16 @@ const Properties = () => {
     return (
         <>
         <header>
+            {/*<h1 id='head' style={{position:'relative', top:'-.5em', left:'-80%', textAlign:'right'}}>rental</h1>*/}
           <div className="header">
                 <img src={image} alt="rental" style={{position:'relative', top:'-12em', left:'-8%', textAlign:'right'}}/>
             </div>
         </header>
-        {/*<Logout />*/}
+        <Logout />
+        <Redirect />
         <div>
             <h1 style={{position:'absolute', top:'20%', left:'35%'}}>Your Listed Properties</h1>
-            <div className="cards-container" style={{top:'-13rem'}}>
+            <div className="cards-container" style={{top:'-15rem'}}>
                 {properties.length > 0 ? (
                     properties.map(property => (
                         <div key={property.id} className="cards">
@@ -122,7 +127,7 @@ const Properties = () => {
                             <div className="property_addresses">{property.address}</div>
                             <div className="property_descriptions">{property.description}</div>
                             <div className="property_detail">
-                                <div className="property_detail_items">
+                                <div className="property_detail_item">
                                     <i className="property_detail_icons">🛏️</i>{property.bedrooms} Bedrooms
                                 </div>
                                 <div className="property_detail_item">

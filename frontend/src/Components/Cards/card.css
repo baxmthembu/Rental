@@ -4,7 +4,7 @@
     gap: 20px;
     justify-content: center;
     position: relative;
-    top: -20rem
+    top: -15rem
 }
 
 .card {
@@ -24,8 +24,8 @@
 }
 
 .carousel .property_image {
-    width: 170px;
-    height: 90%;
+    width: 180px;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -56,6 +56,12 @@
     color: #333;
 }
 
+.property_contact{
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
 .property_details {
     display: flex;
     gap: 15px;
@@ -64,8 +70,9 @@
 
 .property_detail_item {
     font-size: 14px;
-    color: #777;
+    color: #007bff;
     display: flex;
+    font-weight: bold;
     align-items: center;
 }
 
@@ -129,3 +136,116 @@
 .carousel .next {
     right: 0;
 }
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+}
+
+/* Carousel in modal */
+.modal-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-property-image {
+    width: 80%;
+    max-width: 900px;
+    height: auto;
+    margin: 0 15px;
+}
+
+.prev,
+.next {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.prev:hover,
+.next:hover {
+    color: #ddd;
+}
+
+.search-container #search{
+    position: absolute;
+    width: 30%;
+    height: 53px;
+    top: 8em;
+    left: 35%;
+    border-radius: 5px ;
+    border-style: none;
+    font-size: 30px;
+}
+
+.search-container .icon{
+    position: absolute;
+    top: 15.5em;
+    left: 62%;
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.search-container .icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #f7f7f7;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease;
+    z-index: -1; /* Place the background behind the icon */
+}
+
+.search-container .icon:hover::before {
+    transform: translate(-50%, -50%) scale(2.5);
+}
+
+
+
+
+

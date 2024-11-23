@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import './searchbar.css'
 import CIcon from "@coreui/icons-react";
 import { cilSearch } from "@coreui/icons";
+import Logout from "../Logout/logout";
 
 const image = require('../Images/coconut ..png')
 
@@ -39,8 +40,12 @@ const SearchBar = () => {
     return (
         <>
             <div className="rent">
-                <Link to='/home' style={{ textDecoration: 'none', position: 'absolute', top: '30rem', left: '-15rem', color: 'black' }}>
-                    Renting your property?
+                <Link to='/home' style={{ textDecoration: 'none', position: 'absolute', top: '30rem', left: '-23rem', color: 'black' }}>
+                    Renting your property? |
+                </Link>
+                <br />
+                <Link to="/properties" style={{ textDecoration: 'none', color: 'black', position: 'absolute', top: '30rem', left: '-12rem', }}>
+                    | Your listed properties
                 </Link>
             </div>
             <div className="SearchBar">
@@ -51,7 +56,7 @@ const SearchBar = () => {
                     <div className="searchbar">
                         <input 
                             type="text" 
-                            placeholder="Enter Area" 
+                            placeholder="Enter Address: G62 Bhejane Road KwaMashu" 
                             id="search" 
                             value={searchTerm}
                             onChange={handleInputChange} 

@@ -64,7 +64,7 @@ function App(){
       <WorkerProvider>
       <Routes />
       </WorkerProvider>
-    </AuthProvider>
+    </AuthProvider>  
   )
 }
 
