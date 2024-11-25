@@ -212,12 +212,12 @@
     left: 35%;
     border-radius: 5px ;
     border-style: none;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .search-container .icon{
     position: absolute;
-    top: 15.5em;
+    top: 13em;
     left: 62%;
     transition: background-color 0.3s, transform 0.3s;
     z-index: 1;

@@ -105,9 +105,9 @@ const Properties = () => {
             </div>
         </header>
         <Logout />
-        <Redirect />
         <div>
-            <h1 style={{position:'absolute', top:'20%', left:'35%'}}>Your Listed Properties</h1>
+            <h1 style={{position:'absolute', top:'30%', left:'39%'}}>Your Listed Properties</h1>
+            <Redirect /><br />
             <div className="cards-container" style={{top:'-15rem'}}>
                 {properties.length > 0 ? (
                     properties.map(property => (

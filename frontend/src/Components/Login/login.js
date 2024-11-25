@@ -87,7 +87,7 @@ const Login = () => {
                     localStorage.setItem('token', 'Bearer ' + token)
                     setUser({id: userId, role:'owner'})
                     setToken(token)
-                    navigate('/searchbar',{ replace: true })
+                    navigate('/card',{ replace: true })
                 }
         }catch(error){
             if (error.response && error.response.status === 401) {

@@ -123,7 +123,7 @@ const Card = () => {
             <div className="search-container">
                 <input
                     type="text"
-                    placeholder="Enter address"
+                    placeholder="Address: KwaMashu G/ Inanda etc"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     id='search'

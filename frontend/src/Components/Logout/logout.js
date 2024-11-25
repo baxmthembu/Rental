@@ -28,6 +28,8 @@ const Logout = () => {
                 setToken(null);
                 localStorage.removeItem('userId');
                 localStorage.removeItem('token');
+                localStorage.removeItem('_grecaptcha');
+                localStorage.removeItem('__paypal_storage__')
                 // Navigate to a dummy route and then to login to force re-render
                 navigate('/dummy');
                 setTimeout(() => {
