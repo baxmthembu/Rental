@@ -18,6 +18,7 @@ const AuthProvider = ({children}) => {
     }
 
     useEffect(() => {
+        console.log("Token updated:", token); // Debugging
         if(token){
             //if token exists set the authorization header in axios and localstorage
             Axios.defaults.headers.common['Authorization'] = "Bearer " + token;
@@ -27,19 +28,7 @@ const AuthProvider = ({children}) => {
             delete Axios.defaults.headers.common["Authorization"];
             localStorage.removeItem('token')
         }
-    }, [token]);
-
-    /*useEffect(() => {
-        const handleBeforeUnload = () => {
-            localStorage.removeItem('token'); // Remove token when the page or website closes
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);*/
+    }, [token])
 
     //context value includes the token and setToken function
     //the token value is used as a dependency for memoization

@@ -21,7 +21,8 @@ const { check, validationResult } = require('express-validator');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { error } = require('console');
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
@@ -81,12 +82,17 @@ const loginLimiter = rateLimit({
 });
 
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['Authorization']/*.split(' ')[1];*/
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(" ")[1];
+  console.log("Authorization header: ", token)
   
   if (!token) return res.sendStatus(401)
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-      if (err) return res.sendStatus(403);
+      if (err){
+        console.error('JWT verification error: ', err)
+        return res.sendStatus(403);
+      }
       req.user = user;
       next();
   });
@@ -135,11 +141,8 @@ app.post('/register', [
   }
 });
 
-app.post('/property_info', [
-  /*check('users_id').isInt(),*/
+app.post('/property_info', authenticateToken, [
   check('address').trim().escape(),
-  /*check('bedrooms').isInt(),
-  check('bathrooms').isInt(),*/
   check('price').trim().escape(),
   check('description').trim().escape(),
   check('property_type').trim().escape(),
@@ -243,7 +246,7 @@ app.post('/login',  [
           const token = jwt.sign(
             { id: user.id, name: user.name, role: 'owner' }, // Payload
             process.env.JWT_SECRET_KEY, // Replace with your actual secret key
-            { expiresIn: '1h' } // Token expiration time
+            //{ expiresIn: '1h' } // Token expiration time
         );
 
           res.json({
@@ -268,7 +271,7 @@ app.post('/login',  [
   }
 });
 
-app.get('/property', async (req, res) => {
+app.get('/property', authenticateToken, async (req, res) => {
   try {
     const { address } = req.query;
     let data;
@@ -286,7 +289,7 @@ app.get('/property', async (req, res) => {
   }
 });
 
-app.get('/properties/:userId',  async (req, res) => {
+app.get('/properties/:userId', authenticateToken,  async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
 
   if (isNaN(userId)) {
@@ -323,7 +326,7 @@ app.delete('/properties/:propertyId',  async (req, res) => {
   }
 });
 
-app.post('/logout', async (req, res) => {
+app.post('/logout',  async (req, res) => {
   const { userId } = req.body;
   const id = parseInt(userId, 10);
 

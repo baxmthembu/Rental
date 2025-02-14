@@ -24,16 +24,17 @@ const Logout = () => {
 
             if (response.status === 200) {
                 // Clear user context and localStorage only after successful logout
-                setUser(null);
-                setToken(null);
-                localStorage.removeItem('userId');
-                localStorage.removeItem('token');
-                localStorage.removeItem('_grecaptcha');
-                localStorage.removeItem('__paypal_storage__')
+                const handleLogOut = () => {
+                    setUser(null)
+                    setToken(null)
+                    localStorage.clear()
+                    navigate('/login', {replace: true})
+                }
                 // Navigate to a dummy route and then to login to force re-render
                 navigate('/dummy');
                 setTimeout(() => {
-                    navigate('/login');
+                    //navigate('/login');
+                    handleLogOut()
                 }, 0);
             } else {
                 throw new Error('Failed to logout');

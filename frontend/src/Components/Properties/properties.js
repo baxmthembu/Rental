@@ -34,10 +34,13 @@ const Properties = () => {
                 setIsLoading(false);
             }*/
            try{
+                const token = localStorage.getItem("token")
+                console.log("Token before API call:", token)
                 const response = await fetch(`http://localhost:3001/properties/${userId}`, {
                     headers: {
                         'Content-type': 'application/json',
                         Accept: 'application/json',
+                        Authorization: `Bearer ${token.trim()}`
                     },
                 });
 

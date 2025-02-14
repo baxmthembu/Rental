@@ -14,6 +14,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 import AuthProvider from "./provider/authProvider";
 import Routes from "./routes";
+import ClearStorage from "./ClearStorage/clearstorage";
 
 /*function App() {
   return (
@@ -62,6 +63,7 @@ function App(){
   return (
     <AuthProvider>
       <WorkerProvider>
+        <ClearStorage />
       <Routes />
       </WorkerProvider>
     </AuthProvider>  

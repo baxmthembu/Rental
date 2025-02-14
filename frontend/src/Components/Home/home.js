@@ -80,8 +80,12 @@ const Home = () => {
 
         setLoading(true); // Start spinner
         try {
+            const token = localStorage.getItem("token")
             const response = await Axios.post('http://localhost:3001/property_info', formDataWithFile, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token.trim()}`
+                },
             });
 
             if (isNaN(formData.bedrooms) || isNaN(formData.bathrooms)) {

@@ -11,6 +11,8 @@ import Register from "../Components/Register/register";
 
 
 const Routes = () => {
+    /*The useAuth hook is called to retrieve the token value from the authentication context. 
+      It allows us to access the authentication token within the Routes component.*/
     const {token} = useAuth()
 
     //routes accessible only to authenticated users
