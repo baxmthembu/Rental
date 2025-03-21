@@ -17,22 +17,6 @@ const Properties = () => {
     useEffect(() => {
         const fetchProperties = async () => {
             const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
-            /*try {
-                const response = await Axios.get(`http://localhost:3001/properties/${workerId}`);
-                if (response.status === 200) {
-                    const processedWorkersData = response.map(worker => ({
-                        ...worker,
-                        image_url: worker.image_url.split(','), // Convert the comma-separated string to an array
-                    }));    
-                    setProperties(processedWorkersData);
-                } else {
-                    console.error('Failed to fetch properties');
-                }
-            } catch (error) {
-                console.error('An error occurred while fetching properties:', error);
-            } finally {
-                setIsLoading(false);
-            }*/
            try{
                 const token = localStorage.getItem("token")
                 console.log("Token before API call:", token)

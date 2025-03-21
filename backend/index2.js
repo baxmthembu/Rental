@@ -305,6 +305,22 @@ app.get('/properties/:userId', authenticateToken,  async (req, res) => {
   }
 });
 
+app.get('/propert/:storedLike', authenticateToken,  async (req, res) => {
+  const userId = parseInt(req.params.storedLike, 10);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    const properties = await db('property_info').where('id', userId);
+    res.status(200).json(properties);
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    res.status(500).json({ message: 'Error fetching properties' });
+  }
+});
+
 app.delete('/properties/:propertyId',  async (req, res) => {
   const propertyId = parseInt(req.params.propertyId, 10);
 
@@ -335,7 +351,7 @@ app.post('/logout',  async (req, res) => {
   }
 
   try {
-    await db('users').where({ id }).update({ logged_in: false });
+    await db('users').where({ id }).update({logged_in: false});
     res.json({ msg: 'Logout Successful' });
   } catch (error) {
     console.error('Error:', error);

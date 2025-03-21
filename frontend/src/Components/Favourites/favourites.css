@@ -1,0 +1,204 @@
+/*.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+    top: 20rem;
+}*/
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    position: relative;
+    top: 20rem;
+}
+
+.cards-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.carousel .property_image {
+    width: 180px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel img {
+    width: 100%;
+    height: auto;
+}
+
+.carousel .prev, .carousel .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.carousel .prev {
+    left: 0;
+}
+
+.carousel .next {
+    right: 0;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/*.cards {
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out;
+    position: relative; /* Ensures overlay is positioned within the card *
+}*/
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+.cards:hover {
+    transform: translateY(-5px);
+}
+
+.carousel .property_images {
+    width: 180px;
+    height: 100%;
+    object-fit: cover;
+}
+
+#head{
+    font-size: 80px;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-optical-sizing: auto;
+    letter-spacing: -.3rem;
+    text-decoration:none;
+    color: black;
+}
+
+.cards-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.property_prices {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.property_descriptions {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.property_addresses {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.property_detail {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.property_detail_items {
+    font-size: 14px;
+    color: #777;
+    display: flex;
+    align-items: center;
+}
+
+.property_detail_icons {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+/* Carousel in modal */
+.modal-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-property-image {
+    width: 80%;
+    max-width: 900px;
+    height: auto;
+    margin: 0 15px;
+}
+
+.prev,
+.next {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.prev:hover,
+.next:hover {
+    color: #ddd;
+}

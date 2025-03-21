@@ -8,6 +8,7 @@ import Home from "../Components/Home/home";
 import Properties from "../Components/Properties/properties"
 import Login from "../Components/Login/login"
 import Register from "../Components/Register/register";
+import Favorites from "../Components/Favourites/favourites";
 
 
 const Routes = () => {
@@ -36,6 +37,10 @@ const Routes = () => {
                 {
                     path: "/properties",
                     element: <Properties />
+                },
+                {
+                    path: "/favourites",
+                    element: <Favorites />
                 }
             ]
         }

@@ -7,8 +7,7 @@ import DOMPurify from 'dompurify';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAuth } from "../../provider/authProvider";
 
-const logo = require('../Images/logo.png')
-const image = require('../Images/coconut ..png')
+const logo = require('../Images/coconut ..png')
 
 
 const Login = () => {
@@ -101,10 +100,6 @@ const Login = () => {
     
     }
 
-    /*setTimeout(() => {
-        ProceedLogin();
-      }, 3 * 1000);*/
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -114,6 +109,7 @@ const Login = () => {
         setCaptchaValue(value);
       };
 
+
     return(
         <>
         <div>
@@ -121,7 +117,7 @@ const Login = () => {
             <div className="register-form">
                 <form onSubmit={ProceedLogin} className="form">
                     <div className="register-logo">
-                        <img src={image} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} />
+                        <img src={logo} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} />
                     </div>
                     <h1 className="header">Sign in</h1>
                     <div className="form-container">
