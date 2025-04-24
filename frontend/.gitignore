@@ -11,6 +11,9 @@
 # production
 .env
 node_modules
+node_modules/
+.cache/
+.gh-pages/
 
 # misc
 .DS_Store
