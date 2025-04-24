@@ -54,12 +54,4 @@ const Logout = () => {
 };
 
 
-/*const styles = {
-    button: {
-        float: 'right',
-        right: '20px',
-        bottom: '1rem'
-    }
-  }*/
-
   export default Logout

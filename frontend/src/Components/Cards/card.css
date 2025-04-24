@@ -5,6 +5,7 @@
     justify-content: center;
     position: relative;
     top: -15rem;
+    right: 20px;
 }
 
 .sort-container #sort{
@@ -19,7 +20,7 @@
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: white;
     transition: transform 0.2s ease-in-out;
 }
 
@@ -68,7 +69,7 @@
 .homes{
     width: 50px;
     position: relative;
-    left: 88rem;
+    left: 86rem;
     top: -34.3em;
 }
 
@@ -95,7 +96,7 @@
 .property_contact{
     font-size: 16px;
     font-weight: bolder;
-    color: #3a3b3c;
+    color: #1A2421;
 }
 
 .property_contact .icon{
