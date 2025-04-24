@@ -27,11 +27,11 @@ const { error } = require('console');
 app.use(json())
 app.use(urlencoded({ extended: false }));
 app.use(cors({
-  origin: 'http://localhost:3003',
+  origin: ['http://localhost:3003', "https://rental-977n.onrender.com"],
   credentials: true
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003');
+  res.setHeader('Access-Control-Allow-Origin', ['http://localhost:3003', "https://rental-977n.onrender.com"]);
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -65,8 +65,8 @@ const db = knex({
 
   cloudinary.config({ 
     cloud_name: 'dp9gjl43m', 
-    api_key: '559611397692518', 
-    api_secret: 'e8n19zYEck8q3LlU-0XpFXwnJoY' // Click 'View API Keys' above to copy your API secret
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
 });
 
 //loginLimiter helps protect against abuse such as brute force attacks or excessive API requests
