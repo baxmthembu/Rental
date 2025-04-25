@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate} from 'react-router-dom';
 import Axios from 'axios';
 import './properties.css';
 import Logout from '../Logout/logout';
