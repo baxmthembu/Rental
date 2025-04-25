@@ -81,7 +81,7 @@ const Home = () => {
         setLoading(true); // Start spinner
         try {
             const token = localStorage.getItem("token")
-            const response = await Axios.post('http://localhost:3001/property_info', formDataWithFile, {
+            const response = await Axios.post(/*'http://localhost:3001/property_info'*/`${process.env.REACT_APP_API_URL}/property_info`, formDataWithFile, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token.trim()}`

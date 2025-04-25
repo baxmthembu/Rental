@@ -36,7 +36,8 @@ const Card = () => {
 
                 console.log("Sending token:", localStorage.getItem("token"));
                 const response = await fetch(
-                    `http://localhost:3001/property?address=${address}`,
+                    /*`http://localhost:3001/property?address=${address}`*/
+                    `${process.env.REACT_APP_API_URL}/property?address=${address}`,
                     {
                         headers: {
                             "Content-type": "application/json",

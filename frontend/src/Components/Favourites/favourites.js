@@ -24,7 +24,7 @@ const Favourites = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await fetch("http://localhost:3001/property", 
+                const response = await fetch(/*"http://localhost:3001/property"*/`${process.env.REACT_APP_API_URL}/property`, 
                     {
                         headers: {
                             'Content-type': 'application/json',

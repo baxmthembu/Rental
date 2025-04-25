@@ -18,7 +18,7 @@ const Logout = () => {
             }
 
             // Send the logout request to the server
-            const response = await Axios.post('http://localhost:3001/logout', {
+            const response = await Axios.post(/*'http://localhost:3001/logout'*/ `${process.env.REACT_APP_API_URL}/logout`, {
                 userId: user.id
             });
 
