@@ -1,13 +1,11 @@
-import React, { useState,use } from "react";
+import React, { useState} from "react";
 import {useNavigate, Link} from 'react-router-dom'
 import './register.css';
 import Axios from 'axios';
 import IsValidate from "../Validate/validate";
-import DOMPurify from 'dompurify';
 
 
 
-const logo = require('../Images/logo.png')
 const image = require('../Images/coconut ..png')
 
 const Register = () => {
@@ -63,7 +61,7 @@ const Register = () => {
                 <h1>Sign Up</h1>
                 <form onSubmit={handleSubmit} className="form">
                     <div className="register-logo">
-                        <img src={image} className='register-logo' />
+                        <img src={image} className='register-logo' alt="logo" />
                     </div>
                     <h1 className="header">Sign up</h1>
                     <div className="form-container">

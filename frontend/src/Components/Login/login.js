@@ -11,7 +11,7 @@ const logo = require('../Images/coconut ..png')
 
 
 const Login = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [, setIsLoading] = useState(false);
     const {setUser} = useContext(WorkerContext)
     const {setToken} = useAuth()
     const [formData, setFormData] = useState({
@@ -117,7 +117,7 @@ const Login = () => {
             <div className="register-form">
                 <form onSubmit={ProceedLogin} className="form">
                     <div className="register-logo">
-                        <img src={logo} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} />
+                        <img src={logo} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} alt="logo" />
                     </div>
                     <h1 className="header">Sign in</h1>
                     <div className="form-container">

@@ -4,7 +4,6 @@ import DOMPurify from "dompurify";
 import './searchbar.css'
 import CIcon from "@coreui/icons-react";
 import { cilSearch } from "@coreui/icons";
-import Logout from "../Logout/logout";
 
 const image = require('../Images/coconut ..png')
 

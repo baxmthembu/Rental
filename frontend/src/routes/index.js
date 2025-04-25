@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { Children } from "react";
 import SearchBar from "../Components/SearchBar/searchbar";
 import Card from "../Components/Cards/card";
 import Home from "../Components/Home/home";

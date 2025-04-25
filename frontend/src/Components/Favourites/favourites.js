@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Logout from "../Logout/logout";
 import '../Cards/card.css';
 import Redirect from "../Reroute/redirect";

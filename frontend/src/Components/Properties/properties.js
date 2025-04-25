@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Axios from 'axios';
 import './properties.css';
 import Logout from '../Logout/logout';
@@ -9,9 +9,7 @@ const image = require('../Images/coconut ..png')
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState({});
-    const navigate = useNavigate()
 
 
     useEffect(() => {
