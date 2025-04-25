@@ -22,7 +22,7 @@ const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const { error } = require('console');
+const { error, Console } = require('console');
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
@@ -43,12 +43,12 @@ app.use(express.json())
 const db = knex({
     client: 'pg',
     connection: {
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE,
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },  
     },
   });
+
+  console.log('Using DATABASE_URL:', process.env.DATABASE_URL)
 
 
     const storage = new CloudinaryStorage({
