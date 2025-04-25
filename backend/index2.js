@@ -27,11 +27,11 @@ const { error, Console } = require('console');
 app.use(json())
 app.use(urlencoded({ extended: false }));
 app.use(cors({
-  origin: ['http://localhost:3003', "https://rental-qdw8.onrender.com"],
+  origin: ['http://localhost:3003', "https://rental-qdw8.onrender.com", 'https://rentekasi.com'],
   credentials: true
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', ['http://localhost:3003', "https://rental-qdw8.onrender.com"]);
+  res.setHeader('Access-Control-Allow-Origin', ['http://localhost:3003', "https://rental-qdw8.onrender.com", 'https://rentekasi.com']);
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
