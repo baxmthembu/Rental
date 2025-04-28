@@ -124,9 +124,9 @@
     color: red;
     font-size: 0.875em;
     margin-top: 0.5em;
-    position: absolute;
+    position: relative;
     left: 1rem;
-    top: 10%;
+    top: 4rem;
 }
 
 .register-link{
