@@ -84,7 +84,7 @@
     top: 12%
 }
 
-.error-message {
+.error-message, .error-message2 {
     color: red;
     font-size: 14px;
     margin-top: 5px;
@@ -127,6 +127,14 @@
     position: relative;
     left: 1rem;
     top: 1rem
+}
+
+.error-message2{
+    color: red;
+    font-size: 0.875em;
+    margin-top: 0.5em;
+    position: relative;
+    left: -2rem;
 }
 
 .register-link{
