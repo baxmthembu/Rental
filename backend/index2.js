@@ -27,7 +27,7 @@ const { error, Console } = require('console');
 app.use(json())
 app.use(urlencoded({ extended: false }));
 app.use(cors({
-  origin: ['http://localhost:3003', "https://rental-qdw8.onrender.com", 'https://rentekasi.com'],
+  origin: "https://rental-qdw8.onrender.com",
   credentials: true
 }));
 app.use(function (req, res, next) {
