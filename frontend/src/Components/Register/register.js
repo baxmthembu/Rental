@@ -33,7 +33,7 @@ const Register = () => {
         if(validationResponse.isValid){
             try {
                 const { password2, ...dataToSend } = formData;
-                const response = await Axios.post(/*'http://localhost:3001/register'*/ `${process.env.REACT_APP_API_URL}/register`, dataToSend);
+                const response = await Axios.post(`${process.env.REACT_APP_API_URL}/register`, dataToSend);
 
                 if(response.status === 200){
                     console.log('Register Successful')
