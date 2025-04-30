@@ -23,8 +23,8 @@ const Card = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOption, setSortOption] = useState("");
     const [priceRange, setPriceRange] = useState([500, 10000]);
-    const [bedroomRange, setBedroomRange] = useState(1);
-    const [bathroomRange, setBathroomRange] = useState(1);
+    const [bedroomRange, setBedroomRange] = useState(0);
+    const [bathroomRange, setBathroomRange] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
@@ -128,8 +128,8 @@ const Card = () => {
 
     const resetFilters = () => {
         setPriceRange([500, 10000]);
-        setBedroomRange(1);
-        setBathroomRange(1);
+        setBedroomRange(0);
+        setBathroomRange(0);
         setUsersData(originalUsersData);
         setCurrentPage(1);
     };

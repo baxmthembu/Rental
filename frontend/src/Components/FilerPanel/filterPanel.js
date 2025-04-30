@@ -33,7 +33,7 @@ const FilterPanel = ({
         <label>Bedrooms: {bedroomRange}</label>
         <input
           type="range"
-          min="1"
+          min="0"
           max="10"
           value={bedroomRange}
           onChange={(e) => setBedroomRange(parseInt(e.target.value))}
@@ -44,7 +44,7 @@ const FilterPanel = ({
         <label>Bathrooms: {bathroomRange}</label>
         <input
           type="range"
-          min="1"
+          min="0"
           max="10"
           value={bathroomRange}
           onChange={(e) => setBathroomRange(parseInt(e.target.value))}
