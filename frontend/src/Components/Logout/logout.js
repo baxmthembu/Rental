@@ -28,7 +28,7 @@ const Logout = () => {
                     setUser(null)
                     setToken(null)
                     localStorage.clear()
-                    navigate('/login', {replace: true})
+                    navigate('/', {replace: true})
                 }
                 // Navigate to a dummy route and then to login to force re-render
                 navigate('/dummy');
