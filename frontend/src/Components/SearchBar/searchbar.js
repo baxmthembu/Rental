@@ -56,7 +56,7 @@ const SearchBar = () => {
                         <input 
                             type="text" 
                             placeholder="Enter Address: G62 Bhejane Road KwaMashu" 
-                            id="search" 
+                            id="search"
                             value={searchTerm}
                             onChange={handleInputChange} 
                         />
