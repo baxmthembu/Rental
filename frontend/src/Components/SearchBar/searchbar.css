@@ -12,11 +12,12 @@ img .rental-logo{
 }
 
 .searchbar #search{
-    position: absolute;
+    position: relative;
     width: 50%;
     height: 53px;
-    top: 10em;
-    left: 25%;
+    /*top: 10em;
+    left: 25%;*/
+    margin-top:  40px auto;
     border-radius: 5px ;
     border-style: none;
     font-size: 30px;
@@ -50,6 +51,29 @@ img .rental-logo{
 
 .searchbar .icon:hover::before {
     transform: translate(-50%, -50%) scale(2.5);
+}
+
+#home{
+    text-decoration: 'none'; 
+    position: 'absolute';
+    top: '30rem'; 
+    left: '-23rem'; 
+    color: 'black'
+}
+
+#properties{
+    text-decoration: 'none'; 
+    color: 'black'; 
+    position: 'absolute'; 
+    top: '30rem';
+    left: '-12rem';
+}
+
+#error{
+    color: 'red'; 
+    position:'relative';
+    top:'22rem';
+    left:'25rem';
 }
 
 /*.searchbar .icon:hover{

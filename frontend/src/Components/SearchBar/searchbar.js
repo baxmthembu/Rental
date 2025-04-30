@@ -39,17 +39,17 @@ const SearchBar = () => {
     return (
         <>
             <div className="rent">
-                <Link to='/home' style={{ textDecoration: 'none', position: 'absolute', top: '30rem', left: '-23rem', color: 'black' }}>
+                <Link to='/home' id="home">
                     Renting your property? |
                 </Link>
-                <br />
-                <Link to="/properties" style={{ textDecoration: 'none', color: 'black', position: 'absolute', top: '30rem', left: '-12rem', }}>
+                
+                <Link to="/properties" id="properties">
                     | Your listed properties
                 </Link>
             </div>
             <div className="SearchBar">
                 <div className="logo">
-                    <img src={image} alt="Company Rental logo" className='rental-logo' style={{ width: '500px', height: 'auto', position: 'absolute', top: '-1em', left: '30%' }} />
+                    <img src={image} alt="Company Rental logo" className='rental-logo' />
                 </div>
                 <div className="search-container">
                     <div className="searchbar">
@@ -61,7 +61,7 @@ const SearchBar = () => {
                             onChange={handleInputChange} 
                         />
                         <CIcon icon={cilSearch} size="sm" customClassName={'icon'} height={40} onClick={handleSearch} />
-                        {error && <p style={{ color: 'red', position:'relative',top:'22rem',left:'25rem' }}>{error}</p>}
+                        {error && <p id="error">{error}</p>}
                     </div>
                 </div>
             </div>

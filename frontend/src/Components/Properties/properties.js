@@ -85,12 +85,12 @@ const Properties = () => {
         <header>
             {/*<h1 id='head' style={{position:'relative', top:'-.5em', left:'-80%', textAlign:'right'}}>rental</h1>*/}
           <div className="header">
-                <img src={image} alt="rental" style={{position:'relative', top:'-12em', left:'-8%', textAlign:'right'}}/>
+                <img src={image} alt="rental" id="properties-image"/>
             </div>
         </header>
         <Logout />
         <div>
-            <h1 style={{position:'absolute', top:'30%', left:'39%'}}>Your Listed Properties</h1>
+            <h1 id='properties-header'>Your Listed Properties</h1>
             <Redirect /><br />
             <div className="cards-container" style={{top:'-15rem'}}>
                 {properties.length > 0 ? (

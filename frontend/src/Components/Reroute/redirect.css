@@ -1,8 +1,8 @@
 .rent{
     position: relative;
-    float: right;
+    float: left;
     top: -26em;
-    left: -2%;
+    left: 2%;
     text-decoration: none;
     display: flex;
     gap: 5px;

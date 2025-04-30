@@ -5,7 +5,7 @@
     justify-content: center;
     position: relative;
     top: -20rem;
-    left: 14%
+    left: -14%
 }
 
 .cards {
@@ -127,4 +127,17 @@
 
 .delete-button:hover {
     background-color: darkred;
+}
+
+#properties-image{
+    position: relative; 
+    top: -12em; 
+    left: -8%; 
+    text-align: right
+}
+
+#properties-header{
+    position: absolute; 
+    top: 30%; 
+    left: 39%
 }

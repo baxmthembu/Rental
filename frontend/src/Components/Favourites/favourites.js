@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Logout from "../Logout/logout";
-import '../Cards/card.css';
+//import '../Cards/card.css';
 import Redirect from "../Reroute/redirect";
+import "./favourites.css"
 
 const image = require('../Images/coconut ..png')
 const image2 = require('../Images/red-heart-icon.png')
@@ -102,15 +103,14 @@ const Favourites = () => {
                     <img
                         src={image}
                         alt="rental"
-                        style={{ position: "relative", top: "-12em", left: "-8%", textAlign: "right" }}
                     />
                 </div>
                 <Logout />
-                <h1 style={{position:'absolute', top:'30%', left:'39%'}}>Favorite Properties</h1>
+                <h1 id="favourites-header">Favorite Properties</h1>
                 <Redirect />
             </header>
             {/* Sort by dropdown */}
-            <div className="sort-container">
+            <div className="sort-containers">
                 <label htmlFor="sort">Sort by:</label>
                 <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
                     <option value="">Select</option>
@@ -118,7 +118,7 @@ const Favourites = () => {
                     <option value="high-to-low">Price: High to Low</option>
                 </select>
             </div>
-            <div className="card-container">
+            <div className="cards-containers">
                 {favoriteProperties.length > 0 ? (
                     favoriteProperties.map((property) => (
                         <div key={property.id} className="card">
@@ -144,7 +144,7 @@ const Favourites = () => {
                             </div>
                             <div className="card-content">
                                 <div className="liked_one">
-                                    <img src={image2} alt='white-logo-heart'  style={{width:'40px', height:'40px'}}/>
+                                    <img src={image2} alt='white-logo-heart' id="favourites-image"/>
                                 </div>
                                 <div className="property_price">R {property.price}</div>
                                 <div className="property_address">{property.address}</div>

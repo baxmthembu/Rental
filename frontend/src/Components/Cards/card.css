@@ -1,12 +1,25 @@
-.card-container {
+/*.card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     position: relative;
-    top: -15rem;
-    right: 20px;
-}
+    top: -35rem;
+    right: 45px;
+}*/
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: -45rem;
+    margin-bottom: 20px;
+    position: relative;
+    left: -14rem;
+    transform: translateX(-2rem);
+  }
+  
 
 .sort-container #sort{
     cursor: pointer
@@ -69,7 +82,7 @@
 .homes{
     width: 50px;
     position: relative;
-    left: 86rem;
+    left: 60rem;
     top: -34.3em;
 }
 
@@ -138,7 +151,7 @@
 .sort-container{
     position: relative;
     top: -24em;
-    right: -2%;
+    left: 0%;
 }
 
 .rent{
@@ -304,3 +317,13 @@
     transition: fill 0.3s ease;
 }
 
+.filter{
+    position: relative;
+    top: -18rem
+}
+
+.pagination-container {
+    margin-top: 20px; /* or adjust smaller */
+    text-align: center;
+    margin-bottom: 40px;
+  }
