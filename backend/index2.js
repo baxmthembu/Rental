@@ -26,6 +26,7 @@ const { error, Console } = require('console');
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
+const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
   origin: 'https://rentekasi.com',
   credentials: true
