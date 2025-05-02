@@ -83,7 +83,6 @@ const Properties = () => {
     return (
         <>
         <header>
-            {/*<h1 id='head' style={{position:'relative', top:'-.5em', left:'-80%', textAlign:'right'}}>rental</h1>*/}
           <div className="header">
                 <img src={image} alt="rental" id="header-img"/>
             </div>
@@ -105,7 +104,6 @@ const Properties = () => {
                                 />
                                 <button className="next" onClick={() => handleNextImage(property.id)}>❯</button>
                             </div>
-                            {/*<img src={property.image_url[currentImageIndex[property.id || 0]]} alt={property.description} className="property_images" />*/}
                             <div className="cards-content">
                             <div className="property_prices">R {property.price}</div>
                             <div className="property_addresses">{property.address}</div>

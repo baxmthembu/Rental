@@ -10,7 +10,7 @@ const logo = require('../Images/coconut-logo ..png')
 
 
 const Login = () => {
-    const [, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const {setUser} = useContext(WorkerContext)
     const {setToken} = useAuth()
     const [formData, setFormData] = useState({
@@ -20,6 +20,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const [captchaValue, setCaptchaValue] = useState('');
+    
 
     //Whitelist input define the allowed characters or patterns in each input field
     const nameRegex = /^[a-zA-Z0-9 ]*$/;
@@ -134,7 +135,11 @@ const Login = () => {
                         className="recaptcha"
                     />
                     <div className="button">
-                        <button type="submit" className="submit">Sign in</button><br />
+                        <button type="submit" disabled={isLoading} className="submit">
+                            {isLoading ? 'Submitting...' : 'Submit'}
+                            Sign in
+                        </button><br />
+                        {isLoading && <div className="spinner">Loading...</div>}
                         <p>or <Link to='/register' className="register-link">create account</Link></p>
                     </div>
                 </form>
@@ -143,8 +148,6 @@ const Login = () => {
         </div>
         </>
     )
-
-
 }
 
 export default Login

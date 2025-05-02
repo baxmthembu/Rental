@@ -1,7 +1,7 @@
 import Logout from '../Logout/logout';
 import './home.css';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import Axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -112,7 +112,7 @@ const Home = () => {
         <>
             <header>
                 <div className="header">
-                    <img src={image} alt="rental" id='header-img' /*style={{ position: 'relative', top: '-12em', left: '-8%', textAlign: 'right' }}*/ />
+                    <img src={image} alt="rental" id='header-img' />
                 </div>
             </header>
             <Logout />

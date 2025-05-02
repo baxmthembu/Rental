@@ -22,7 +22,6 @@ const Register = () => {
     const handleChange = (e) => {
         const {name, value} = e.target;
         const sanitizedValue = value.replace(/[^a-zA-Z0-9\s@.]/g, '');
-        /*setFormData({...formData, [name]: value});*/
         setFormData({ ...formData, [name]: sanitizedValue });
     };
 
