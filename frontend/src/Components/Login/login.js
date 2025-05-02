@@ -136,8 +136,8 @@ const Login = () => {
                     />
                     <div className="button">
                         <button disabled={isLoading} className="submit">
-                            {isLoading ? 'Submitting...' : 'Submit'}
-                            Sign in
+                            {isLoading ? 'Submitting...' : 'Sign in'}
+                            
                         </button><br />
                         {isLoading && <div className="spinner">Loading...</div>}
                         <p>or <Link to='/register' className="register-link">create account</Link></p>
