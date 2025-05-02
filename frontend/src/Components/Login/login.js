@@ -135,7 +135,7 @@ const Login = () => {
                         className="recaptcha"
                     />
                     <div className="button">
-                        <button type="submit" disabled={isLoading} className="submit">
+                        <button disabled={isLoading} className="submit">
                             {isLoading ? 'Submitting...' : 'Submit'}
                             Sign in
                         </button><br />
