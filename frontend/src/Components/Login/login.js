@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAuth } from "../../provider/authProvider";
 
-const logo = require('../Images/coconut ..png')
+const logo = require('../Images/coconuts ..svg')
 
 
 const Login = () => {
