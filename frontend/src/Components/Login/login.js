@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAuth } from "../../provider/authProvider";
 
-const logo = require('../Images/coconuts ..svg')
+const logo = require('../Images/coconut-logo ..png')
 
 
 const Login = () => {
@@ -116,7 +116,7 @@ const Login = () => {
             <div className="register-form">
                 <form onSubmit={ProceedLogin} className="form">
                     <div className="register-logo">
-                        <img src={logo} className='register-logo' style={{top:'-4em', width:'600px', left:'40%'}} alt="logo" />
+                        <img src={logo} className='register-logo' alt="logo" />
                     </div>
                     <h1 className="header">Sign in</h1>
                     <div className="form-container">
@@ -134,9 +134,6 @@ const Login = () => {
                         onChange={handleCaptchaChange}
                         className="recaptcha"
                     />
-                    {/*<div className="form-container">
-                        <p><input type="checkbox" className="icon" style={{cursor: 'pointer'}}/>I agree all statements in <a href="/home" style={{textDecoration:'none',color:'blue'}}>Terms of service</a></p>
-                    </div>*/}
                     <div className="button">
                         <button type="submit" className="submit">Sign in</button><br />
                         <p>or <Link to='/register' className="register-link">create account</Link></p>

@@ -6,7 +6,7 @@ import IsValidate from "../Validate/validate";
 
 
 
-const image = require('../Images/coconuts ..svg')
+const image = require('../Images/coconut-logo ..png')
 
 const Register = () => {
     const [formData ,setFormData] = useState({
