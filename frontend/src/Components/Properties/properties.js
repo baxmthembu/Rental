@@ -4,7 +4,7 @@ import './properties.css';
 import Logout from '../Logout/logout';
 import Redirect from '../Reroute/redirect';
 
-const image = require('../Images/coconut ..png')
+const image = require('../Images/coconut-logo ..png')
 
 const Properties = () => {
     const [properties, setProperties] = useState([]);
@@ -85,14 +85,14 @@ const Properties = () => {
         <header>
             {/*<h1 id='head' style={{position:'relative', top:'-.5em', left:'-80%', textAlign:'right'}}>rental</h1>*/}
           <div className="header">
-                <img src={image} alt="rental" id="properties-image"/>
+                <img src={image} alt="rental" id="header-img"/>
             </div>
         </header>
         <Logout />
         <div>
             <h1 id='properties-header'>Your Listed Properties</h1>
             <Redirect /><br />
-            <div className="cards-container" style={{top:'-15rem'}}>
+            <div className="cards-container">
                 {properties.length > 0 ? (
                     properties.map(property => (
                         <div key={property.id} className="cards">

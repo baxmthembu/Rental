@@ -13,17 +13,31 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
-    margin-top: -45rem;
+    margin-top: -12.5rem;/*45*/
     margin-bottom: 20px;
     position: relative;
-    left: -14rem;
+    left: -1rem;
     transform: translateX(-2rem);
-  }
+}
+
+.header #header-img{
+    position: relative;
+    top: 2em; 
+    left: -12%; 
+    text-align: right;
+    width: 50%;
+}
   
 
-.sort-container #sort{
-    cursor: pointer
+.sort-container #sort, #sort-label{
+    cursor: pointer;
+    position: relative;
+    top: 25rem;
+    left: 5rem;
+    padding: 1px;
+    font-weight: 500;
 }
+
 
 .card {
     display: flex;
@@ -83,7 +97,7 @@
     width: 50px;
     position: relative;
     left: 60rem;
-    top: -34.3em;
+    top: -10em;
 }
 
 .property_price {
@@ -265,10 +279,10 @@
 
 .search-container #search{
     position: absolute;
-    width: 30%;
+    width: 40%;
     height: 53px;
     top: 8em;
-    left: 35%;
+    left: 28%;
     border-radius: 5px ;
     border-style: none;
     font-size: 25px;
@@ -277,7 +291,7 @@
 .search-container .icon{
     position: absolute;
     top: 13em;
-    left: 62%;
+    left: 65%;
     transition: background-color 0.3s, transform 0.3s;
     z-index: 1;
     display: flex;

@@ -23,7 +23,7 @@ const Home = () => {
     const [loading, setLoading] = useState(false); // Spinner state
     const navigate = useNavigate();
 
-    const image = require("../Images/coconut ..png");
+    const image = require("../Images/coconut-logo ..png");
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -112,9 +112,7 @@ const Home = () => {
         <>
             <header>
                 <div className="header">
-                    <Link to='/card' className='logo-link'>
-                        <img src={image} alt="rental" style={{ position: 'relative', top: '-12em', left: '-8%', textAlign: 'right' }} />
-                    </Link>
+                    <img src={image} alt="rental" id='header-img' /*style={{ position: 'relative', top: '-12em', left: '-8%', textAlign: 'right' }}*/ />
                 </div>
             </header>
             <Logout />

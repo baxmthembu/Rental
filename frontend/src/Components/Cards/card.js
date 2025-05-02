@@ -10,7 +10,7 @@ import FilterPanel from '../FilerPanel/filterPanel';
 
 
 
-const image = require('../Images/coconut ..png')
+const image = require('../Images/coconut-logo ..png')
 const red = require('../Images/red-heart-icon.png')
 const white = require('../Images/white-icon.png')
 
@@ -40,8 +40,8 @@ const Card = () => {
                 const params = new URLSearchParams(location.search);
                 const address = params.get("address") || "";
 
-                /*const response = await fetch(`http://localhost:3001/property?address=${address}`*/
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`, {
+                const response = await fetch(`http://localhost:3001/property?address=${address}`
+                /*const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`*/, {
                     headers: {
                         "Content-type": "application/json",
                         Accept: "application/json",
@@ -152,7 +152,7 @@ const Card = () => {
         <div className='main-container'>
             <header>
                 <div className="header">
-                    <img src={image} alt="rental" style={{ position: "relative", top: "-12em", left: "-8%", textAlign: "right" }} />
+                    <img src={image} alt="rental" id='header-img'/>
                 </div>
                 <Logout />
                 <div className='homes'>
@@ -177,7 +177,7 @@ const Card = () => {
             </div>
 
             <div className="sort-container">
-                <label htmlFor="sort">Sort by:</label>
+                <label htmlFor="sort" id='sort-label'>Sort by:</label>
                 <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
                     <option value="">Select</option>
                     <option value="low-to-high">Price: Low to High</option>
