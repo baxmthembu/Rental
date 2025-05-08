@@ -107,7 +107,6 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 // Register route with input validation
 app.post('/register', [
-  check('name').isLength({ min: 3 }).trim().escape(),
   check('email').isEmail().normalizeEmail(),
   check('password').isLength({ min: 6 }).trim().escape(),
 ], async (req, res) => {
@@ -116,7 +115,7 @@ app.post('/register', [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const {name,email, password } = req.body;
 
   try {
     const existingUser = await db('users').where({ email }).first();
@@ -270,23 +269,22 @@ app.post('/property_info', authenticateToken, [
 
 // Property info route with input validation
 app.post('/login',  [
-  check('name').isLength({ min: 3 }).trim().escape(),
   check('password').isLength({ min: 6 }).trim(),
 ], loginLimiter, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
   }
-  const { name, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!name || !password) {
-      return res.status(400).json({ msg: 'Please provide both name and password' });
+  if (!email || !password) {
+      return res.status(400).json({ msg: 'Please provide both email and password' });
   }
 
   try {
       const user = await db('users')
-          .select('id', 'name', 'password')
-          .where({name}/*db.raw('?', [name])*/)
+          .select('id', 'email', 'password')
+          .where({email}/*db.raw('?', [name])*/)
           .first();
 
       if (!user) {
@@ -302,7 +300,7 @@ app.post('/login',  [
 
               // Create JWT token
           const token = jwt.sign(
-            { id: user.id, name: user.name, role: 'owner' }, // Payload
+            { id: user.id, role: 'owner' }, // Payload
             process.env.JWT_SECRET_KEY, // Replace with your actual secret key
             //{ expiresIn: '1h' } // Token expiration time
         );
@@ -312,7 +310,6 @@ app.post('/login',  [
               token,
               user: {
                   id: user.id,
-                  name: user.name,
                   role: 'owner',
                   logged_in: true,
                   auth: true,
