@@ -28,11 +28,11 @@ app.use(json())
 app.use(urlencoded({ extended: false }));
 const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
-  origin: 'https://rentekasi.com',
+  origin: 'http://localhost:3003',
   credentials: true
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -56,7 +56,8 @@ const db = knex({
       cloudinary: cloudinary,
       params: {
           folder: 'public/images', // optional folder name
-          allowed_formats: ['jpg', 'jpeg', 'png'], // allow only images
+          allowed_formats: ['jpg', 'jpeg', 'png', 'mp4', 'webm'], // allow only images
+          resource_type: 'auto'
       },
   });
   
@@ -142,12 +143,12 @@ app.post('/register', [
   }
 });
 
-app.post('/property_info', authenticateToken, [
+/*app.post('/property_info', authenticateToken, [
   check('address').trim().escape(),
   check('price').trim().escape(),
   check('description').trim().escape(),
   check('property_type').trim().escape(),
-], upload.array('images', 10), async (req, res) => {
+], upload.array('media', 10), async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -208,7 +209,63 @@ app.post('/property_info', authenticateToken, [
     console.error('Error:', error);
     return res.status(500).json({ msg: 'An error happened' });
   }
+});*/
+
+app.post('/property_info', authenticateToken, [
+  check('address').trim().escape(),
+  check('price').trim().escape(),
+  check('description').trim().escape(),
+  check('property_type').trim().escape(),
+], upload.array('media', 10), async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { users_id, address, bedrooms, bathrooms, price, description, phone_number, email, property_type } = req.body;
+  const mediaFiles = req.files;
+
+  try {
+    if (!mediaFiles || mediaFiles.length === 0) {
+      return res.status(400).json({ msg: 'No media selected' });
+    }
+
+    const mediaUrls = mediaFiles.map(file => file.path);
+
+    const userResult = await db('users').select('name').where({ id: users_id }).first();
+    if (!userResult) {
+      return res.status(400).json({ msg: 'User not found' });
+    }
+
+    const userName = userResult.name;
+    const bedroomsInt = parseInt(bedrooms, 10);
+    const bathroomsInt = parseInt(bathrooms, 10);
+
+    if (isNaN(bedroomsInt) || isNaN(bathroomsInt)) {
+      throw new Error('Invalid input for bedrooms or bathrooms');
+    }
+
+    await db('property_info').insert({
+      users_id,
+      address,
+      bedrooms: bedroomsInt,
+      bathrooms: bathroomsInt,
+      price,
+      description,
+      property_type,
+      image_url: mediaUrls.join(','), // you may rename this to media_url if it now includes videos
+      phone_number,
+      email,
+      name: userName,
+    });
+
+    return res.json({ msg: 'Property info sent' });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ msg: 'An error happened' });
+  }
 });
+
 
 
 // Property info route with input validation
