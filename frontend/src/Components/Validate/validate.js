@@ -22,10 +22,10 @@ const IsValidate = (formData) => {
       return { isValid: false, errorMessage: 'Please enter a valid email' };
     }
 
-    if (formData.password !== formData.password2) {
+    /*if (formData.password !== formData.password2) {
         console.error('Passwords do not match');
         return { isValid: false, errorMessage: 'Passwords do not match' };
-    }
+    }*/
 
     return { isValid: true };
 

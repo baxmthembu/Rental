@@ -14,7 +14,7 @@ const Login = () => {
     const {setUser} = useContext(WorkerContext)
     const {setToken} = useAuth()
     const [formData, setFormData] = useState({
-        name: '',
+        email: '',
         password: ''
     })
     const [errors, setErrors] = useState({});
@@ -23,15 +23,13 @@ const Login = () => {
     
 
     //Whitelist input define the allowed characters or patterns in each input field
-    const nameRegex = /^[a-zA-Z0-9 ]*$/;
+    const nameRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+[.][A-Za-z.]{2,}$/;
 
     const Validate = (formData) => {
         const errors = {};
-        if (!formData.name) {
-            errors.name = 'Name is required';
-        } else if (formData.name.length < 3) {
-            errors.name = 'Name must be at least 3 characters';
-        }else if (!nameRegex.test(formData.name)) {
+        if (!formData.email) {
+            errors.name = 'Email is required';
+        }else if (!nameRegex.test(formData.email)) {
             errors.name = 'Name can only contain letters';
         }
 
@@ -60,7 +58,7 @@ const Login = () => {
 
          // Sanitize input fields to prevent XSS attacks
          const sanitizedFormData = {
-            name: sanitizeInput(formData.name),
+            name: sanitizeInput(formData.email),
             password: formData.password
         };
 
@@ -89,7 +87,7 @@ const Login = () => {
                 }
         }catch(error){
             if (error.response && error.response.status === 401) {
-                setErrors({ password: 'Incorrect password or username' });
+                setErrors({ password: 'Incorrect password or email' });
             } else {
                 console.error('Error:', error);
             }
@@ -121,26 +119,30 @@ const Login = () => {
                     <h1 className="header">Sign in</h1>
                     <div className="form-container">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/></svg>
-                        <input value={formData.name} onChange={handleChange} type="text" name="name" placeholder="Enter name" required /><br />
-                        {errors.name && <span className="error-message">{errors.name}</span>}
+                        <input value={formData.name} onChange={handleChange} type="email" name="email" placeholder="Enter email" required /><br />
+                        {errors.email && <span className="error-message">{errors.email}</span>}
                     </div>
                     <div className="form-container">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/></svg>
                         <input value={formData.password} onChange={handleChange} type="password" name="password" placeholder="Enter password" required/><br /><br />
                         {errors.password && <span className="error-message2">{errors.password}</span>}
                     </div>
+                    <div id="recaptcha">
                     <ReCAPTCHA
-                        sitekey="6Lc3CKYnAAAAAHjblBln1V7QStAE_H6kD5tYuMPl"
+                        sitekey= "6Lc3CKYnAAAAAHjblBln1V7QStAE_H6kD5tYuMPl"
                         onChange={handleCaptchaChange}
                         className="recaptcha"
                     />
+                    </div>
                     <div className="button">
                         <button disabled={isLoading} className="submit">
                             {isLoading ? 'Submitting...' : 'Sign in'}
                             
                         </button><br />
                         {isLoading && <div className="spinner">Loading...</div>}
+                        <div id="create-account">
                         <p>or <Link to='/register' className="register-link">create account</Link></p>
+                        </div>
                     </div>
                 </form>
             </div>
