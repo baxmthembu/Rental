@@ -1,7 +1,7 @@
 import Logout from '../Logout/logout';
 import './home.css';
 import React, { useState } from 'react';
-import {useNavigate } from 'react-router-dom';
+import {useNavigate, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import Axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -36,8 +36,8 @@ const Home = () => {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        const maxFileSize = 5 * 1024 * 1024; // 5MB
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif','video/mp4', 'video/webm'];
+        const maxFileSize = 20 * 1024 * 1024; // 5MB
 
         for (let file of files) {
             if (!validTypes.includes(file.type)) {
@@ -45,7 +45,7 @@ const Home = () => {
                 return;
             }
             if (file.size > maxFileSize) {
-                setError('File size too large. Please upload files under 5MB.');
+                setError('File size too large. Please upload files under 20MB.');
                 return;
             }
         }
@@ -75,7 +75,7 @@ const Home = () => {
         formDataWithFile.append('property_type', formData.property_type);
 
         file.forEach((file) => {
-            formDataWithFile.append('images', file);
+            formDataWithFile.append('media', file);
         });
 
         setLoading(true); // Start spinner
@@ -110,12 +110,18 @@ const Home = () => {
 
     return (
         <>
+        <div className='home-container'>
+            <div id='home-back'>
+                <Link to='/card'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id='home-back-logo'><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM215 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L392 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-214.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L103 273c-9.4-9.4-9.4-24.6 0-33.9L215 127z"/></svg></Link>
+            </div>
             <header>
                 <div className="header">
                     <img src={image} alt="rental" id='header-img' />
                 </div>
             </header>
-            <Logout />
+            <div className='home-logout'>
+                <Logout className="home-logout-button" />
+            </div>
             <div>
                 <form onSubmit={Submit}>
                     <div className="containers">
@@ -172,8 +178,22 @@ const Home = () => {
                                 </select>
                             </div>
                             <label>Upload images</label>
-                            <input type="file" multiple onChange={handleImageChange} name='images' required/>
+                            <input type="file" 
+                            multiple onChange={handleImageChange} 
+                            name='images'
+                            accept="image/jpeg, image/png, image/gif, video/mp4, video/webm" 
+                            required/>
                         </div>
+                        {file.map((f, index) =>
+                            f.type.startsWith("image/") ? (
+                            <img key={index} src={URL.createObjectURL(f)} alt="preview" width="100" />
+                            ) : (
+                                <video key={index} width="150" controls>
+                                    <source src={URL.createObjectURL(f)} type={f.type} />
+                                    Your browser does not support the video tag.
+                                </video>
+                            )
+                        )}
                         {error && <p style={{ color: 'red' }}>{error}</p>}
                         <div className="button-container">
                             <button type='submit' disabled={loading}>
@@ -185,6 +205,7 @@ const Home = () => {
                 </form>
                 <ToastContainer />
             </div>
+        </div>
         </>
     );
 }

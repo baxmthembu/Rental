@@ -4,9 +4,11 @@
     gap: 20px;
     justify-content: center;
     position: relative;
-    top: 15rem;
-    left: -14%
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    
 }
+
 
 .cards {
     display: flex;
@@ -25,11 +27,28 @@
     transform: translateY(-5px);
 }
 
-.carousel .property_images {
+.carouselss .property_images {
     width: 180px;
     height: 100%;
     object-fit: cover;
 }
+
+.carouselss .prev,
+.carouselss .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.8);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.3rem 0.8rem;
+    z-index: 1;
+}
+
+.carouselss .prev { left: 10px; }
+.carouselss .next { right: 10px; }
+
 
 #head{
     font-size: 80px;
@@ -48,6 +67,8 @@
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .property_prices {
@@ -138,6 +159,94 @@
 
 #properties-header{
     position: absolute; 
-    top: 30%; 
-    left: 39%
+    margin-top: 4%; 
+    margin-left: 39%;
 }
+
+.paginations-container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    
+}
+
+.paginations-container button {
+    padding: 8px 12px;
+    background-color: #ccc;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.paginations-container button.active,
+.paginations-container button:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .cards-container {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 4rem;
+    }
+  
+    .cards {
+      flex-direction: column !important;
+      width: 90%;
+      max-width: 300px;
+    }
+  
+    .carouselss .property_images {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+  
+    .carouselss .prev,
+    .carouselss .next {
+      top: 45%;
+      font-size: 1.2rem;
+      padding: 0.2rem 0.6rem;
+    }
+  
+    .cards-content {
+      font-size: 14px;
+      padding: 12px;
+    }
+  
+    .property_prices {
+      font-size: 20px;
+    }
+  
+    #properties-header {
+      position: static;
+      margin: 2rem auto 1rem auto;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 6.9rem;
+    }
+  
+    .paginations-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding-bottom: 2rem;
+    }
+
+    .properties-container{
+        overflow: hidden;
+    }
+
+    #properties-redirect{
+        position: absolute;
+        top: 30%;
+    }
+
+    #property-logout{
+        display: none;
+    }
+  }
+  

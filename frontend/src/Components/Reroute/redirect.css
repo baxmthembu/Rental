@@ -15,3 +15,11 @@
     font-weight: bold;
     font-size: 17px;
 }
+
+@media (max-width: 768px) {
+    .rent{
+        gap: 1px;
+        position: relative;
+        margin-left: 2rem;
+    }
+}

@@ -7,6 +7,9 @@ import { cilSearch } from "@coreui/icons";
 import Redirect from '../Reroute/redirect';
 import 'rc-slider/assets/index.css';
 import FilterPanel from '../FilerPanel/filterPanel';
+import 'react-pro-sidebar/dist/css/styles.css';
+import Sidebar from '../SideBar/sidebar';
+import Modal from '../Modal/modal';
 
 
 
@@ -19,12 +22,14 @@ const Card = () => {
     const [originalUsersData, setOriginalUsersData] = useState([]);
     const [likedProperties, setLikedProperties] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState({});
-    const [, setSelectedProperty] = useState(null);
+    const [selectedProperty, setSelectedProperty] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOption, setSortOption] = useState("");
     const [priceRange, setPriceRange] = useState([500, 10000]);
     const [bedroomRange, setBedroomRange] = useState(0);
     const [bathroomRange, setBathroomRange] = useState(0);
+    const [showFilter, setShowFilter] = useState(false);
+    const toggleFilter = () => setShowFilter(!showFilter);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
@@ -40,8 +45,8 @@ const Card = () => {
                 const params = new URLSearchParams(location.search);
                 const address = params.get("address") || "";
 
-                /*const response = await fetch(`http://localhost:3001/property?address=${address}`*/
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`, {
+                const response = await fetch(`http://localhost:3001/property?address=${address}`
+                /*const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`*/, {
                     headers: {
                         "Content-type": "application/json",
                         Accept: "application/json",
@@ -150,11 +155,14 @@ const Card = () => {
     return (
         <>
         <div className='main-container'>
+            <Sidebar />
             <header>
                 <div className="header">
                     <img src={image} alt="rental" id='header-img'/>
                 </div>
-                <Logout />
+                <div className='logout-desktop-only'>
+                <Logout className="menu-items"/>
+                </div>
                 <div className='homes'>
                     <Link to="/favourites">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
@@ -163,11 +171,10 @@ const Card = () => {
                 </div>
                 <Redirect />
             </header>
-
             <div className="search-container">
                 <input
                     type="text"
-                    placeholder="Address: KwaMashu G/ Inanda etc "
+                    placeholder="KwaMashu G"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     id='search'
@@ -184,7 +191,10 @@ const Card = () => {
                     <option value="high-to-low">Price: High to Low</option>
                 </select>
             </div>
+            {/* Toggle Filter Button (mobile only) */}
+            <button className="filter-toggle" onClick={toggleFilter}>Filter</button>
 
+            <div className={showFilter ? "filter-panel-expanded" : "filter-panel-collapsed"}>
             <FilterPanel
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
@@ -195,7 +205,7 @@ const Card = () => {
                 applyFilters={applyFilters}
                 resetFilters={resetFilters}
             />
-
+            </div>
             <div className="card-container">
                 {currentItems.map((user) => (
                     <div key={user.id} className="card">
@@ -206,6 +216,7 @@ const Card = () => {
                                 alt="Property"
                                 className="property_image"
                                 onClick={() => openModal(user)}
+                                title='click image to enlarge'
                             />
                             <button className="next" onClick={() => handleNextImage(user.id)}>❯</button>
                         </div>
@@ -259,6 +270,11 @@ const Card = () => {
                     </button>
                 ))}
             </div>
+            <Modal
+                isOpen={!!selectedProperty}
+                onClose={() => setSelectedProperty(null)}
+                property={selectedProperty}
+            />
         </div>
         </>
     );

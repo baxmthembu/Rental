@@ -104,3 +104,94 @@
 .logo-link:hover {
     pointer-events: auto; /* Enable clicking on hover */
 }
+
+#home-back{
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .home-container{
+        overflow: hidden;
+    }
+
+    .containers {
+        left: 0;
+        top: 0;
+        margin: 1rem auto;
+        padding: 1.5rem;
+        box-shadow: none;
+        max-width: 70%;
+        border-radius: 0;
+    }
+
+    .header h1 {
+        font-size: 19px;
+        text-align: center;
+        right: 0;
+        position: relative;
+        right: 8%;
+        font-weight: bold;
+        color: #4CAF50;
+    }
+
+    .input-container label {
+        font-size: 13px;
+    }
+
+    .input-container input[type="text"],
+    .input-container input[type="tel"],
+    .input-container input[type="email"],
+    .input-container select,
+    .input-container textarea {
+        font-size: 20px;
+        padding: 8px;
+    }
+
+    .input-container textarea{
+        width: 100%;
+    }
+
+    .button-container button {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .spinner {
+        font-size: 14px;
+    }
+
+    #header-img {
+        max-width: 60%;
+        height: auto;
+        position: absolute;
+        left: -10rem;
+        
+    }
+
+    .header{
+        position: relative;
+        right: 6rem;
+        
+    }
+
+    .home-logout{
+        position: relative;
+        left: -12rem;
+        top: -2rem;
+        display: none;
+    }
+
+    #home-back{
+        position: relative;
+        top: 15%;
+        display: block;
+    }
+
+    #home-back-logo{
+        position: relative;
+        width: 10%;
+        top: 15px;
+        left: 2rem;
+    }
+}

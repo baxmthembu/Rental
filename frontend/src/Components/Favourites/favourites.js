@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Logout from "../Logout/logout";
-//import '../Cards/card.css';
 import Redirect from "../Reroute/redirect";
-import "./favourites.css"
+import "./favourites.css";
+import SortComponent from "../Sort Component/SortComponent";
+import { Link } from "react-router-dom";
 
-const image = require('../Images/coconut ..png')
+const image = require('../Images/coconut-logo ..png')
 const image2 = require('../Images/red-heart-icon.png')
 
 const Favourites = () => {
@@ -12,7 +13,9 @@ const Favourites = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState({});
     const [likedProperties, setLikedProperties] = useState([]);
     const [selectedProperty, setSelectedProperty] = useState(null);
-    const [sortOption, setSortOption] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+    
     
 
     useEffect(() => {
@@ -82,45 +85,60 @@ const Favourites = () => {
         setSelectedProperty(null);
     };
 
-    const handleSort = (option) => {
-        setSortOption(option);
-        let sortedData = [...usersData]; // Create a copy of the data
-
-        if (option === "low-to-high") {
-            sortedData.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-        } else if (option === "high-to-low") {
-            sortedData.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    const handleSort = (e) => {
+        const value = e.target.value;
+        let sorted = [...usersData];
+    
+        if (value === "lowToHigh") {
+          sorted.sort((a, b) => a.price - b.price);
+        } else if (value === "highToLow") {
+          sorted.sort((a, b) => b.price - a.price);
         }
-
-        setUsersData(sortedData);
+    
+        setUsersData(value === "default" ? usersData : sorted);
+        setCurrentPage(1);
     };
+    
+    const totalPages = Math.ceil(usersData.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = usersData.slice(indexOfFirstItem, indexOfLastItem);
+ 
+    const handlePageClick = (pageNum) => {
+        setCurrentPage(pageNum);
+        window.scrollTo({ top: 0, behavior: "smooth" }); // Optional: scroll to top on page change
+    }; 
 
 
     return (
         <>
+        <div className="favourites-container">
+            <div id='home-back'>
+                <Link to='/card'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id='home-back-logo'><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM215 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L392 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-214.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L103 273c-9.4-9.4-9.4-24.6 0-33.9L215 127z"/></svg></Link>
+            </div>
             <header>
                 <div className="header">
                     <img
                         src={image}
                         alt="rental"
+                        id="header-img"
                     />
                 </div>
-                <Logout />
-                <h1 id="favourites-header">Favorite Properties</h1>
-                <Redirect />
             </header>
+                <div id="favourites-logout">
+                    <Logout />
+                </div>
+                <div id="properties-redirect">
+                    <Redirect id='property-redirect' />
+                </div>
+                <h1 id="properties-header">Favorite Properties</h1><br />
             {/* Sort by dropdown */}
-            <div className="sort-containers">
-                <label htmlFor="sort">Sort by:</label>
-                <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
-                    <option value="">Select</option>
-                    <option value="low-to-high">Price: Low to High</option>
-                    <option value="high-to-low">Price: High to Low</option>
-                </select>
+            <div className="sort-container">
+                <SortComponent handleSort={handleSort} />
             </div>
             <div className="cards-containers">
-                {favoriteProperties.length > 0 ? (
-                    favoriteProperties.map((property) => (
+                {/*favoriteProperties*/currentItems.length > 0 ? (
+                    /*favoriteProperties*/currentItems.map((property) => (
                         <div key={property.id} className="card">
                             <div className="carousel">
                                 <button
@@ -174,6 +192,25 @@ const Favourites = () => {
                     <p>No properties found.</p>
                 )}
             </div>
+            <div className="paginations-container">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => handlePageClick(page)}
+                        style={{
+                            margin: "0 5px",
+                            padding: "8px 12px",
+                            backgroundColor: currentPage === page ? "#333" : "#ccc",
+                            color: currentPage === page ? "#fff" : "#000",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        }}
+                    >
+                    {page}
+                    </button>
+                ))}
+            </div>
             {/* Modal Component */}
             {selectedProperty && (
                 <div className="modal">
@@ -197,6 +234,7 @@ const Favourites = () => {
                     </div>
                 </div>
             )}
+        </div>
         </>
     );
 };

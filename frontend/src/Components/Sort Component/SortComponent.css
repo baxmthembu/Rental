@@ -1,0 +1,8 @@
+@media (max-width: 768px) {
+    #sort {
+        padding: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-left: 0.2rem;
+    }
+}
