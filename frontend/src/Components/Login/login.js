@@ -75,6 +75,7 @@ const Login = () => {
         }
         try{
                 const response = await Axios.post(`${process.env.REACT_APP_API_URL}/login`, sanitizedFormData)
+                /*const response = await Axios.post('http://localhost:3001/login', sanitizedFormData)*/
                 if(response.status === 200){
                     console.log('logged in')
                     const userId = response.data.user.id;
