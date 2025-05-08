@@ -28,9 +28,9 @@ const Login = () => {
     const Validate = (formData) => {
         const errors = {};
         if (!formData.email) {
-            errors.name = 'Email is required';
+            errors.email = 'Email is required';
         }else if (!nameRegex.test(formData.email)) {
-            errors.name = 'Name can only contain letters';
+            errors.email = 'Name can only contain letters';
         }
 
         if (!formData.password) {
@@ -58,7 +58,7 @@ const Login = () => {
 
          // Sanitize input fields to prevent XSS attacks
          const sanitizedFormData = {
-            name: sanitizeInput(formData.email),
+            email: sanitizeInput(formData.email),
             password: formData.password
         };
 
