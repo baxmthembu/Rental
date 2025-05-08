@@ -22,7 +22,7 @@ const Properties = () => {
            try{
                 const token = localStorage.getItem("token")
                 console.log("Token before API call:", token)
-                const response = await fetch(`http://localhost:3001/properties/${userId}`/*`${process.env.REACT_APP_API_URL}/properties/${userId}`*/, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/properties/${userId}`, {
                     headers: {
                         'Content-type': 'application/json',
                         Accept: 'application/json',
@@ -54,7 +54,7 @@ const Properties = () => {
     const handleDelete = async (propertyId) => {
         try {
             // Send delete request to your backend API
-            const response = await Axios.delete(`http://localhost:3001/properties/${propertyId}`);
+            const response = await Axios.delete(`${process.env.REACT_APP_API_URL}/properties/${propertyId}`)
             
             if (response.status === 200) {
                 // Remove the deleted property from the local state

@@ -45,8 +45,8 @@ const Card = () => {
                 const params = new URLSearchParams(location.search);
                 const address = params.get("address") || "";
 
-                const response = await fetch(`http://localhost:3001/property?address=${address}`
-                /*const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`*/, {
+                /*const response = await fetch(`http://localhost:3001/property?address=${address}`*/
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`, {
                     headers: {
                         "Content-type": "application/json",
                         Accept: "application/json",
