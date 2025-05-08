@@ -1,4 +1,3 @@
-// components/SortComponent.js
 import React from "react";
 import './SortComponent.css'
 

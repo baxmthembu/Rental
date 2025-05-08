@@ -83,49 +83,6 @@ const Register = () => {
             </div>
         </div>
         </>
-       /* <>
-    <div className="register-container">
-    <div className="register-form">
-      
-      
-
-      <h1 className="header">Sign Up</h1>
-
-      <form onSubmit={handleSubmit} className="form">
-
-        <div className="form-container">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="..." /></svg>
-          <input value={formData.name} onChange={handleChange} type="text" name="name" placeholder="Enter name" required />
-        </div>
-
-        <div className="form-container">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon"><path d="..." /></svg>
-          <input value={formData.email} onChange={handleChange} type="email" name="email" placeholder="Enter email" required autoComplete="off" />
-        </div>
-
-        <div className="form-container">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="..." /></svg>
-          <input value={formData.password} onChange={handleChange} type="password" name="password" placeholder="Enter password" required autoComplete="off" />
-        </div>
-
-        <div className="form-container">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon"><path d="..." /></svg>
-          <input onChange={handleChange} type="password" name="password2" placeholder="Repeat password" required autoComplete="off" />
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-        </div>
-
-        <div className="button">
-          <button type="submit" className="submit">Submit</button>
-          <p>Already have an account? <Link to="/" className="register-link">Sign in</Link></p>
-        </div>
-      </form>
-      <div className="register-logo-container">
-       <img src={image} className="register-logo-img" alt="logo" />
-      </div>
-
-    </div>
-  </div>
-</>*/ 
     )
 }
 

@@ -8,8 +8,6 @@ const Sidebar = () => {
     return(
         <>
         <div className="Sidebar">
-            {/*<div className="bm-burger-button"></div>
-            <div className="bm-burger-bars"></div>*/}
             <Menu>  
                 <div className="menus">
                     <ul id="menu-list" className="menu" style={{listStyle:'none', padding:0}}>

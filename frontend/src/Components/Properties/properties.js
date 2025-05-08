@@ -54,7 +54,7 @@ const Properties = () => {
     const handleDelete = async (propertyId) => {
         try {
             // Send delete request to your backend API
-            const response = await Axios.delete(`http://localhost:3001/properties/${propertyId}` /*`${process.env.REACT_APP_API_URL}/properties/${propertyId}`*/);
+            const response = await Axios.delete(`http://localhost:3001/properties/${propertyId}`);
             
             if (response.status === 200) {
                 // Remove the deleted property from the local state
