@@ -77,7 +77,8 @@ const Card = () => {
         setLikedProperties(storedLikes);
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+        e.preventDefault()
         navigate(`/card?address=${encodeURIComponent(searchQuery)}`);
     };
 
@@ -171,6 +172,7 @@ const Card = () => {
                 </div>
                 <Redirect />
             </header>
+            <form className='search-container' onSubmit={handleSearch}>
             <div className="search-container">
                 <input
                     type="text"
@@ -180,9 +182,9 @@ const Card = () => {
                     id='search'
                     className="search-bar"
                 />
-                <CIcon icon={cilSearch} size="sm" customClassName={'icon'} height={40} onClick={handleSearch} />
+                <button className='search-icon' onClick={handleSearch}>Search</button>
             </div>
-
+            </form>
             <div className="sort-container">
                 <label htmlFor="sort" id='sort-label'>Sort by:</label>
                 <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>

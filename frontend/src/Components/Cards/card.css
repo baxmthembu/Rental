@@ -36,6 +36,19 @@
     cursor: pointer;
 }
 
+.search-container .search-icon{
+    position: absolute;
+    margin-top: 4.5em;
+    margin-left: 32.1rem;
+    width: 6%;
+    height: 51px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
 
 #header-img {
     width: 200px;
@@ -364,20 +377,25 @@
         margin-left: 4rem;
     }
 
-    .search-container .icon {
+    .search-container .search-icon {
+        display: none;
+    }
+
+    /*.search-container .icon {
         position: static;
         margin: 1rem auto;
         width: 10%;
         margin-top: -13%;
         margin-right: 5rem;
-    }
+    }*/
+
 
     .sort-container {
         flex-direction: column;
         align-items: flex-start;
         margin: 1rem;
         display: inline;
-        margin-left: 2rem;
+        margin-left: 1.5rem;
     }
     
     #sort {
