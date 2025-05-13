@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './card.css';
 import Logout from '../Logout/logout';
-import CIcon from "@coreui/icons-react";
-import { cilSearch } from "@coreui/icons";
+/*import CIcon from "@coreui/icons-react";
+import { cilSearch } from "@coreui/icons";*/
 import Redirect from '../Reroute/redirect';
 import 'rc-slider/assets/index.css';
 import FilterPanel from '../FilerPanel/filterPanel';
