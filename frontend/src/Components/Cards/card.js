@@ -209,49 +209,52 @@ const Card = () => {
             />
             </div>
             <div className="card-container">
-                {currentItems.map((user) => (
-                    <div key={user.id} className="card">
-                        <div className="carousel">
-                            <button className="prev" onClick={(e) => { e.stopPropagation(); handlePrevImage(user.id); }}>❮</button>
-                            <img
-                                src={user.image_url[currentImageIndex[user.id] || 0]}
-                                alt="Property"
-                                className="property_image"
-                                onClick={() => openModal(user)}
-                                title='click image to enlarge'
-                            />
-                            <button className="next" onClick={() => handleNextImage(user.id)}>❯</button>
-                        </div>
-                        <div className="card-content">
-                            <div className={`liked_one ${likedProperties.includes(user.id) ? 'liked' : ''}`} onClick={() => toggleLike(user.id)}>
-                                <img src={likedProperties.includes(user.id) ? red : white} alt='heart' style={{ width: '40px', height: '40px' }} />
+                {currentItems.length > 0 ? (
+                    currentItems.map((user) => (
+                        <div key={user.id} className="card">
+                            <div className="carousel">
+                                <button className="prev" onClick={(e) => { e.stopPropagation(); handlePrevImage(user.id); }}>❮</button>
+                                <img
+                                    src={user.image_url[currentImageIndex[user.id] || 0]}
+                                    alt="Property"
+                                    className="property_image"
+                                    onClick={() => openModal(user)}
+                                    title='click image to enlarge'
+                                />
+                                <button className="next" onClick={() => handleNextImage(user.id)}>❯</button>
                             </div>
-                            <div className="property_price">R {user.price}</div>
-                            <div className="property_address">{user.address}</div>
-                            <div className="property_description">{user.description}</div>
-                            <div className="property_details">
-                                <div className="property_detail_item">
-                                    <i className="property_detail_icon">🛏️</i>
-                                    {user.bedrooms} Bedrooms
+                            <div className="card-content">
+                                <div className={`liked_one ${likedProperties.includes(user.id) ? 'liked' : ''}`} onClick={() => toggleLike(user.id)}>
+                                    <img src={likedProperties.includes(user.id) ? red : white} alt='heart' style={{ width: '40px', height: '40px' }} />
                                 </div>
-                                <div className="property_detail_item">
-                                    <i className="property_detail_icon">🛁</i>
-                                    {user.bathrooms} Bathrooms
+                                <div className="property_price">R {user.price}</div>
+                                <div className="property_address">{user.address}</div>
+                                <div className="property_description">{user.description}</div>
+                                <div className="property_details">
+                                    <div className="property_detail_item">
+                                        <i className="property_detail_icon">🛏️</i>
+                                        {user.bedrooms} Bedrooms
+                                    </div>
+                                    <div className="property_detail_item">
+                                        <i className="property_detail_icon">🛁</i>
+                                        {user.bathrooms} Bathrooms
+                                    </div>
+                                </div>
+                                <div className='property_contact'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>{user.name}</svg>
+                                    {user.name}
+                                </div>
+                                <div className="property_contact">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='icon'><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+                                    {user.phone_number}
                                 </div>
                             </div>
-                            <div className='property_contact'>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>{user.name}</svg>
-                                {user.name}
-                            </div>
-                            <div className="property_contact">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='icon'><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
-                                {user.phone_number}
-                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                    ) : (
+                    <p>No Properties found</p>
+                )}
             </div>
-
             {/* Pagination Section */}
             <div className="pagination-container">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
