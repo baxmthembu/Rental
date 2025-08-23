@@ -45,11 +45,14 @@ const Logout = () => {
     };
 
     return (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <>
+        {/*<div style={{ textAlign: 'center', marginTop: '20px' }}>
             <button className="button-28" onClick={handleLogout}>
                 Logout
             </button>
-        </div>
+        </div>*/}
+        <button class="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700" onClick={handleLogout}>Logout</button>
+        </>
     );
 };
 

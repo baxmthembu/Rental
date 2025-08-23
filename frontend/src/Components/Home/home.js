@@ -1,213 +1,575 @@
-import Logout from '../Logout/logout';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './home.css';
-import React, { useState } from 'react';
-import {useNavigate, Link } from 'react-router-dom';
-import DOMPurify from 'dompurify';
-import Axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Logout from '../Logout/logout';
+/*import CIcon from "@coreui/icons-react";
+import { cilSearch } from "@coreui/icons";*/
+import 'rc-slider/assets/index.css';
+import FilterPanel from '../FilerPanel/filterPanel';
+import 'react-pro-sidebar/dist/css/styles.css';
+import Sidebar from '../SideBar/sidebar';
+import Modal from '../Modal/modal';
+import Features from '../Features/featurs';
+import Footer from '../Footer/footer';
+import { LikedPropertiesContext } from '../LikedPropertiesContext/LikedPropertiesContext';
+
+
+
+/*const image = require('../Images/coconut-logo ..png')
+const red = require('../Images/red-heart-icon.png')
+const white = require('../Images/white-icon.png')*/
 
 const Home = () => {
-    const [formData, setFormData] = useState({
-        address: '',
-        bedrooms: '',
-        bathrooms: '',
-        price: '',
-        description: '',
-        phone_number: '',
-        email: '',
-        property_type: '',
-    });
-    const [file, setFile] = useState([]);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false); // Spinner state
+    const [usersData, setUsersData] = useState([]);
+    const [originalUsersData, setOriginalUsersData] = useState([]);
+    const {likedProperties, toggleLike} = useContext(LikedPropertiesContext);
+    /*const [, setLikedProperties] = useState([]);*/
+    const [currentImageIndex, setCurrentImageIndex] = useState({});
+    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [sortOption, setSortOption] = useState("");
+    const [priceRange, setPriceRange] = useState([500, 10000]);
+    const [bedroomRange, setBedroomRange] = useState(0);
+    const [bathroomRange, setBathroomRange] = useState(0);
+    const [showFilter, setShowFilter] = useState(false);
+    const toggleFilter = () => setShowFilter(!showFilter);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    const location = useLocation();
     const navigate = useNavigate();
 
-    const image = require("../Images/coconut-logo ..png");
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        const sanitizedValue = DOMPurify.sanitize(value);
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: name === 'bedrooms' || name === 'bathrooms' ? parseInt(sanitizedValue, 10) || '' : sanitizedValue, // Parse numeric fields
+                const params = new URLSearchParams(location.search);
+                const address = params.get("address") || "";
+
+                const response = await fetch(`http://localhost:3001/property?address=${address}`
+                /*const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`*/, {
+                    headers: {
+                        "Content-type": "application/json",
+                        Accept: "application/json",
+                        Authorization: `Bearer ${token.trim()}`
+                    },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch data");
+
+                const usersJson = await response.json();
+                const processedData = usersJson.map(user => ({
+                    ...user,
+                    image_url: user.image_url.split(","),
+                }));
+
+                setUsersData(processedData);
+                setOriginalUsersData(processedData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, [location.search]);
+
+    /*useEffect(() => {
+        const storedLikes = JSON.parse(localStorage.getItem("likedProperties")) || [];
+        setLikedProperties(storedLikes);
+    }, []);*/
+
+    const handleSearch = (e) => {
+        //e.preventDefault()
+        navigate(`/home?address=${encodeURIComponent(searchQuery)}`);
+    };
+
+    const handleSort = (option) => {
+        setSortOption(option);
+        let sortedData = [...usersData];
+        if (option === "low-to-high") {
+            sortedData.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        } else if (option === "high-to-low") {
+            sortedData.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        }
+        setUsersData(sortedData);
+        setCurrentPage(1);
+    };
+
+    const handleNextImage = (userId) => {
+        setCurrentImageIndex((prev) => ({
+            ...prev,
+            [userId]: ((prev[userId] || 0) + 1) % usersData.find(u => u.id === userId).image_url.length,
         }));
     };
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif','video/mp4', 'video/webm'];
-        const maxFileSize = 20 * 1024 * 1024; // 5MB
-
-        for (let file of files) {
-            if (!validTypes.includes(file.type)) {
-                setError('Invalid file type. Please upload an image.');
-                return;
-            }
-            if (file.size > maxFileSize) {
-                setError('File size too large. Please upload files under 20MB.');
-                return;
-            }
-        }
-
-        setFile(files);
-        setError('');
+    const handlePrevImage = (userId) => {
+        setCurrentImageIndex((prev) => {
+            const length = usersData.find(u => u.id === userId).image_url.length;
+            return {
+                ...prev,
+                [userId]: (prev[userId] - 1 + length) % length,
+            };
+        });
     };
 
-    const Submit = async (e) => {
-        e.preventDefault();
-
-        if (file.length === 0) {
-            setError('Please upload at least one image.');
-            return;
-        }
-
-        const userId = localStorage.getItem('userId');
-        const formDataWithFile = new FormData();
-        formDataWithFile.append('users_id', userId);
-        formDataWithFile.append('address', formData.address);
-        formDataWithFile.append('bedrooms', parseInt(formData.bedrooms, 10));
-        formDataWithFile.append('bathrooms', parseInt(formData.bathrooms, 10));
-        formDataWithFile.append('price', formData.price);
-        formDataWithFile.append('description', formData.description);
-        formDataWithFile.append('phone_number', formData.phone_number);
-        formDataWithFile.append('email', formData.email);
-        formDataWithFile.append('property_type', formData.property_type);
-
-        file.forEach((file) => {
-            formDataWithFile.append('media', file);
+    /*const toggleLike = (propertyId) => {
+        setLikedProperties((prev) => {
+            const updated = prev.includes(propertyId)
+                ? prev.filter(id => id !== propertyId)
+                : [...prev, propertyId];
+            localStorage.setItem("likedProperties", JSON.stringify(updated));
+            return updated;
         });
+    };*/
 
-        setLoading(true); // Start spinner
-        try {
-            const token = localStorage.getItem("token")
-            const response = await Axios.post(/*'http://localhost:3001/property_info'*/`${process.env.REACT_APP_API_URL}/property_info`, formDataWithFile, {
-                headers: { 
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token.trim()}`
-                },
-            });
+    const applyFilters = () => {
+        const filtered = usersData.filter(user =>
+            user.price >= priceRange[0] &&
+            user.price <= priceRange[1] &&
+            user.bedrooms >= bedroomRange &&
+            user.bathrooms >= bathroomRange
+        );
+        setUsersData(filtered);
+        setCurrentPage(1);
+    };
 
-            if (isNaN(formData.bedrooms) || isNaN(formData.bathrooms)) {
-                setError('Please select valid numbers for bedrooms and bathrooms.');
-                return;
-            }            
+    const resetFilters = () => {
+        setPriceRange([500, 10000]);
+        setBedroomRange(0);
+        setBathroomRange(0);
+        setUsersData(originalUsersData);
+        setCurrentPage(1);
+    };
 
-            if (response.status === 200) {
-                toast.success("Form Submitted Successfully");
-                setTimeout(() => {
-                    navigate('/card')
-                }, "5000");
-            } else {
-                toast.error("Form Not Submitted");
-            }
-        } catch (error) {
-            toast.error('An error occurred while submitting the form.');
-        } finally {
-            setLoading(false); // Stop spinner
-        }
+    const openModal = (property) => setSelectedProperty(property);
+
+    // Pagination logic
+    const totalPages = Math.ceil(usersData.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = usersData.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageClick = (pageNum) => {
+        setCurrentPage(pageNum);
+        window.scrollTo({ top: 0, behavior: "smooth" }); // Optional: scroll to top on page change
     };
 
     return (
         <>
-        <div className='home-container'>
-            <div id='home-back'>
-                <Link to='/card'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id='home-back-logo'><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM215 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L392 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-214.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L103 273c-9.4-9.4-9.4-24.6 0-33.9L215 127z"/></svg></Link>
-            </div>
-            <header>
-                <div className="header">
-                    <img src={image} alt="rental" id='header-img' />
-                </div>
-            </header>
-            <div className='home-logout'>
-                <Logout className="home-logout-button" />
-            </div>
-            <div>
-                <form onSubmit={Submit}>
-                    <div className="containers">
-                        <div className="header">
-                            <h1>List your rental property with us</h1>
+        {/*<div className='main-container'>*/}
+            <Sidebar />
+            <nav class="bg-white shadow-lg sticky top-0 z-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center h-16">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <h1 class="text-2xl font-bold text-sa-green">Rentekasi</h1>
+                                <p class="text-xs text-gray-600">Trusted Township Rentals</p>
+                            </div>
                         </div>
-                        <div className="input-container">
-                            <div className="input">
-                                <label>Street Address</label>
-                                <input type="text" name="address" onChange={handleChange} required/>
+                        <div class="hidden md:block">
+                            <div class="ml-10 flex items-baseline space-x-4">
+                                <a href="#" class="nav-link bg-sa-green text-white px-3 py-2 rounded-md text-sm font-medium">Find Homes</a>
+                                <Link to='/list_properties' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">List Property</Link>
+                                <Link to='/properties' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">Listed Properties</Link>
+                                <Link to='/favourites' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium relative">
+                                Saved Properties {likedProperties.length > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform transition-all duration-300 scale-100 hover:scale-110">
+                                        {likedProperties.length}
+                                </span> )}</Link>
+                                <Link to='/financing' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">Financing</Link>
+                                <Link to='/about' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">About</Link>
+                                <button class="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700"><Link to="/login">Sign In</Link></button>
+                                <Logout />
                             </div>
-                            <div className="input">
-                                <label>Bedrooms</label>
-                                <select id="type" name="bedrooms" onChange={handleChange} required>
-                                    <option></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
-                            </div>
-                            <div className="input">
-                                <label>Bathrooms</label>
-                                <select id="type" name="bathrooms" onChange={handleChange} required>
-                                    <option></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
-                            </div>
-                            <div className="input">
-                                <label>Price</label>
-                                <input type='text' name='price' /*step="0.01" min="0"*/ onChange={handleChange} required/>
-                            </div>
-                            <div className="input">
-                                <label>Description</label>
-                                <textarea rows="4" cols="50" placeholder="Describe the property" style={{ fontSize: '15px' }} name="description" onChange={handleChange}></textarea>
-                            </div>
-                            <div className="input">
-                                <label>Phone Number</label>
-                                <input type='tel' name='phone_number' onChange={handleChange} required/>
-                            </div>   
-                            <div className="input">
-                                <label>Email</label>
-                                <input type='email' name='email' onChange={handleChange} required/>
-                            </div>              
-                            <div className="input">
-                                <label>Property type</label>
-                                <select id="type" name="property_type" onChange={handleChange} required>
-                                    <option></option>
-                                    <option value="house">House</option>
-                                    <option value="apartment">Apartment</option>
-                                    <option value="room">Room</option>
-                                    <option value="backroom">Backroom</option>
-                                </select>
-                            </div>
-                            <label>Upload images</label>
-                            <input type="file" 
-                            multiple onChange={handleImageChange} 
-                            name='images'
-                            accept="image/jpeg, image/png, image/gif, video/mp4, video/webm" 
-                            required/>
                         </div>
-                        {file.map((f, index) =>
-                            f.type.startsWith("image/") ? (
-                            <img key={index} src={URL.createObjectURL(f)} alt="preview" width="100" />
-                            ) : (
-                                <video key={index} width="150" controls>
-                                    <source src={URL.createObjectURL(f)} type={f.type} />
-                                    Your browser does not support the video tag.
-                                </video>
-                            )
-                        )}
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                        <div className="button-container">
-                            <button type='submit' disabled={loading}>
-                                {loading ? 'Submitting...' : 'Submit'}
+                        <div class="md:hidden">
+                            <button id="mobile-menu-btn" class="text-gray-700 hover:text-sa-green">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
                             </button>
-                            {loading && <div className="spinner">Loading...</div>}
                         </div>
                     </div>
-                </form>
-                <ToastContainer />
+                </div>
+            </nav>
+            {/*<header>
+                <div className="header">
+                    <img src={image} alt="rental" id='header-img'/>
+                </div>
+                <div className='logout-desktop-only'>
+                <Logout className="menu-items"/>
+                </div>
+                <div className='homes'>
+                    <Link to="/favourites">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+                        {likedProperties.length > 0 && <span className="badge">{likedProperties.length}</span>}
+                    </Link>
+                </div>
+                <Redirect />
+            </header>
+            <form className='search-container' onSubmit={handleSearch}>
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="KwaMashu G"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    id='search'
+                    className="search-bar"
+                />
+                <button className='search-icon' onClick={handleSearch}>Search</button>
             </div>
+            </form>
+            <div className="sort-container">
+                <label htmlFor="sort" id='sort-label'>Sort by:</label>
+                <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
+                    <option value="">Select</option>
+                    <option value="low-to-high">Price: Low to High</option>
+                    <option value="high-to-low">Price: High to Low</option>
+                </select>
+            </div>*/}
+            {/*<section class="bg-gradient-to-r from-sa-green to-green-600 text-white py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <h1 class="text-4xl md:text-6xl font-bold mb-6">Find Your Perfect Home in South African Townships</h1>
+                        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Verified listings, instant screening, and trusted financing. Connecting landlords and tenants safely across SA's townships.</p>
+
+
+                        {/* Toggle Filter Button (mobile only) *}
+                        <button className="filter-toggle" onClick={toggleFilter}>Filter</button>
+
+                        <div className={showFilter ? "filter-panel-expanded" : "filter-panel-collapsed"}>
+                            <FilterPanel
+                                priceRange={priceRange}
+                                setPriceRange={setPriceRange}
+                                bedroomRange={bedroomRange}
+                                setBedroomRange={setBedroomRange}
+                                bathroomRange={bathroomRange}
+                                setBathroomRange={setBathroomRange}
+                                applyFilters={applyFilters}
+                                resetFilters={resetFilters}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>*/}
+            {/*<section className="bg-gradient-to-r from-sa-green to-green-600 text-white py-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6">Find Your Perfect Home in South African Townships</h1>
+                        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Verified listings, instant screening, and trusted financing. Connecting landlords and tenants safely across SA's townships.</p>
+
+                        {/* Search Bar Container *}
+                        <div className="max-w-2xl mx-auto flex items-center bg-white rounded-lg shadow-lg overflow-hidden">
+                            {/* Search Input *}
+                            <input
+                                type="text"
+                                placeholder="Search by location (e.g. KwaMashu G)"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                id="search"
+                                className="flex-grow px-4 py-3 text-gray-800 focus:outline-none"
+                                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                            />
+        
+                            {/* Search Button *}
+                            <button 
+                                onClick={handleSearch}
+                                className="bg-sa-gold hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 transition duration-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Filter Toggle Button (mobile only) *}
+                        <button 
+                            onClick={toggleFilter}
+                            className="md:hidden mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-medium py-2 px-4 rounded-lg transition duration-300"
+                        >
+                            {showFilter ? 'Hide Filters' : 'Show Filters'}
+                        </button>
+
+                        {/* Filter Panel *}
+                        <div className={`mt-6 transition-all duration-300 ${showFilter ? "block" : "hidden md:block"}`}>
+                            <FilterPanel
+                                priceRange={priceRange}
+                                setPriceRange={setPriceRange}
+                                bedroomRange={bedroomRange}
+                                setBedroomRange={setBedroomRange}
+                                bathroomRange={bathroomRange}
+                                setBathroomRange={setBathroomRange}
+                                applyFilters={applyFilters}
+                                resetFilters={resetFilters}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>*/}
+            <section className="bg-gradient-to-r from-sa-green to-green-600 text-white py-20">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6">Find Your Perfect Home in South African Townships</h1>
+        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Verified listings, instant screening, and trusted financing. Connecting landlords and tenants safely across SA's townships.</p>
+
+        {/* Search Bar Container */}
+        <div className="max-w-2xl mx-auto flex items-center bg-white rounded-lg shadow-lg overflow-hidden">
+          <input
+            type="text"
+            placeholder="Search by location (e.g. KwaMashu G)"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            id="search"
+            className="flex-grow px-4 py-3 text-gray-800 focus:outline-none"
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <button 
+            onClick={handleSearch}
+            className="bg-sa-gold hover:bg-yellow-500 text-gray-900 font-bold py-4 px-6 transition duration-300"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+            </svg>
+          </button>
         </div>
+
+        {/* Filter Toggle Button (mobile only) */}
+        <button 
+          onClick={toggleFilter}
+          className="md:hidden mt-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-medium py-2 px-4 rounded-lg transition duration-300"
+        >
+          {showFilter ? 'Hide Filters' : 'Show Filters'}
+        </button>
+
+        {/* Filter Panel */}
+        <div className={`mt-6 transition-all duration-300 ${showFilter ? "block" : "hidden md:block"}`}>
+          <FilterPanel
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            bedroomRange={bedroomRange}
+            setBedroomRange={setBedroomRange}
+            bathroomRange={bathroomRange}
+            setBathroomRange={setBathroomRange}
+            applyFilters={applyFilters}
+            resetFilters={resetFilters}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+            {/*<div className="card-container">
+                {currentItems.length > 0 ? (
+                    currentItems.map((user) => (
+                        <div key={user.id} className="card">
+                            <div className="carousel">
+                                <button className="prev" onClick={(e) => { e.stopPropagation(); handlePrevImage(user.id); }}>❮</button>
+                                <img
+                                    src={user.image_url[currentImageIndex[user.id] || 0]}
+                                    alt="Property"
+                                    className="property_image"
+                                    onClick={() => openModal(user)}
+                                    title='click image to enlarge'
+                                />
+                                <button className="next" onClick={() => handleNextImage(user.id)}>❯</button>
+                            </div>
+                            <div className="card-content">
+                                <div className={`liked_one ${likedProperties.includes(user.id) ? 'liked' : ''}`} onClick={() => toggleLike(user.id)}>
+                                    <img src={likedProperties.includes(user.id) ? red : white} alt='heart' style={{ width: '40px', height: '40px' }} />
+                                </div>
+                                <div class="text-2xl font-bold text-sa-green mb-4">R {user.price}/month</div>
+                                <div className="property_address">📍{user.address}</div>
+                                <div className="property_description">{user.description}</div>
+                                <div className="property_details">
+                                    <div className="property_detail_item">
+                                        <i className="property_detail_icon">🛏️</i>
+                                        {user.bedrooms} Bedrooms
+                                    </div>
+                                    <div className="property_detail_item">
+                                        <i className="property_detail_icon">🛁</i>
+                                        {user.bathrooms} Bathrooms
+                                    </div>
+                                </div>
+                                <div className='property_contact'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>{user.name}</svg>
+                                    {user.name}
+                                </div>
+                                <div className="property_contact">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className='icon'><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+                                    {user.phone_number}
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                    ) : (
+                    <p>No Properties found</p>
+                )}
+            </div>*/}
+            <div className="sort-container">
+                <label htmlFor="sort" id='sort-label'>Sort by:</label>
+                <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
+                    <option value="">Select</option>
+                    <option value="low-to-high">Price: Low to High</option>
+                    <option value="high-to-low">Price: High to Low</option>
+                </select>
+            </div>
+            {/*{searchQuery && (*/}
+            
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+            <div className=" grid grid-cols-1 md:grid-cols-3 gap-8">
+                {currentItems.length > 0 ? (
+                    currentItems.map((user) => (
+                        <div key={user.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                            {/* Image Carousel Section */}
+                            <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center relative">
+                                <button 
+                                    className="prev absolute left-2 text-white text-2xl z-10 hover:text-gray-200"
+                                    onClick={(e) => { e.stopPropagation(); handlePrevImage(user.id); }}
+                                >
+                                    ❮
+                                </button>
+          
+                                <img
+                                    src={user.image_url[currentImageIndex[user.id] || 0]}
+                                    alt="Property"
+                                    className="h-full w-full object-cover cursor-pointer"
+                                    onClick={() => openModal(user)}
+                                    title='click image to enlarge'
+                                />
+          
+                                <button 
+                                    className="next absolute right-2 text-white text-2xl z-10 hover:text-gray-200"
+                                    onClick={(e) => { e.stopPropagation(); handleNextImage(user.id); }}
+                                >
+                                    ❯
+                                </button>
+          
+                                {/* Like Button */}
+                                <div 
+                                    className={`absolute top-2 right-2 ${likedProperties.includes(user.id) ? 'text-red-500' : 'text-white'}`}
+                                    onClick={(e) => { e.stopPropagation(); toggleLike(user.id); }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* Property Details Section */}
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="text-xl font-bold">
+                                        {user.bedrooms}BR {user.property_type || 'Property'}
+                                    </h3>
+                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm font-medium">
+                                        Verified
+                                    </span>
+                                </div>
+          
+                                <p className="text-gray-600 mb-2">📍 {user.address}</p>
+                                <p className="text-2xl font-bold text-sa-green mb-4">R {user.price}/month</p>
+                                <p className="text-gray-600 text-sm mb-4">{user.description}</p>
+          
+                                {user.showDetails && (
+                                    <div className="details-section">
+                                        <div className="property_details flex mb-4">
+                                            <div className="property_detail_item mr-4">
+                                                <span className="mr-1">🛏️</span>
+                                                {user.bedrooms} Bedrooms
+                                            </div>
+                                            <div className="property_detail_item">
+                                                <span className="mr-1">🛁</span>
+                                                {user.bathrooms} Bathrooms
+                                            </div>
+                                        </div>
+              
+                                        <div className="property_contact flex items-center mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="w-4 h-4 mr-2">
+                                                <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                                            </svg>
+                                            {user.name}
+                                        </div>
+              
+                                        <div className="property_contact flex items-center mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-4 h-4 mr-2">
+                                                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+                                            </svg>
+                                            {user.phone_number}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button 
+                                    className="w-full bg-sa-green text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
+                                    onClick={() => {
+                                        // Toggle the showDetails state for this specific property
+                                        const updatedItems = currentItems.map(item => 
+                                            item.id === user.id 
+                                            ? {...item, showDetails: !item.showDetails} 
+                                            : item
+                                        );
+                                        setUsersData(updatedItems);
+                                    }}
+                                >
+                                    {user.showDetails ? 'Hide Details' : 'View Details'}
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="col-span-3 text-center py-10">
+                        <p className="text-gray-600 text-xl">No Properties found</p>
+                    </div>
+                )}
+            </div>
+            {currentItems.length > 0 && (
+        <div className=/*pagination-container mt-8 flex justify-center*/ "flex justify-center space-x-2 mt-8">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageClick(page)}
+              className={/*`mx-1 px-4 py-2 rounded-md ${currentPage === page ? 'bg-sa-green text-white' : 'bg-gray-200 text-gray-800' }`*/`px-4 py-2 rounded-md ${currentPage === page ? 'bg-sa-green text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  {/*)}*/}
+            {/* Pagination Section */}
+            {/*<div className="pagination-container">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => handlePageClick(page)}
+                        style={{
+                            margin: "0 5px",
+                            padding: "8px 12px",
+                            backgroundColor: currentPage === page ? "#333" : "#ccc",
+                            color: currentPage === page ? "#fff" : "#000",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        {page}
+                    </button>
+                ))}
+            </div>*/}
+            <Modal
+                isOpen={!!selectedProperty}
+                onClose={() => setSelectedProperty(null)}
+                property={selectedProperty}
+            />
+            <Features />
+            <Footer />
+        {/*</div>*/}
         </>
     );
-}
+};
 
 export default Home;

@@ -23,16 +23,17 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { error, Console } = require('console');
+const {sendAdvertisingNotifications} = require('../frontend/src/Components/Email_Service/emailService'); // Adjust the path as necessary
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
 const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
-  origin: 'https://rentekasi.com',
+  origin: 'http://localhost:3003',
   credentials: true
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -411,6 +412,199 @@ app.post('/logout',  async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ msg: 'An error occurred' });
+  }
+});
+
+// In your backend (index.js)
+app.get('/properties-by-ids', async (req, res) => {
+  try {
+    const { ids } = req.query;
+    
+    if (!ids) {
+      return res.status(400).json({ error: 'No IDs provided' });
+    }
+
+    const idArray = ids.split(',').map(id => parseInt(id));
+    const data = await db('property_info').whereIn('id', idArray);
+    
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching properties by IDs:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/advertising-inquiry', async (req, res) => {
+  try {
+    const {
+      companyName,
+      contactName,
+      email,
+      phone,
+      businessType,
+      website,
+      budget,
+      preferredContact,
+      message
+    } = req.body;
+
+    // Insert into database
+    const result = await db('advertise').insert({
+      company_name: companyName,
+      contact_name: contactName,
+      email: email,
+      phone: phone,
+      business_type: businessType,
+      website: website,
+      budget_range: budget,
+      preferred_contact_method: preferredContact,
+      message: message,
+      ip_address: req.ip,
+      user_agent: req.get('User-Agent')
+    }).returning('*'); // Return all fields
+
+    const newInquiry = result[0];
+
+    // Send email notifications (async - don't wait for completion)
+    sendAdvertisingNotifications(newInquiry).catch(console.error);
+
+    res.status(201).json({ 
+      message: 'Advertising inquiry submitted successfully', 
+      id: newInquiry.id 
+    });
+  } catch (error) {
+    console.error('Error saving advertising inquiry:', error);
+    res.status(500).json({ error: 'Failed to submit inquiry' });
+  }
+});
+
+// Example backend route for saving lease agreements
+app.post('/api/lease-agreements',authenticateToken, async (req, res) => {
+  const {
+    landlordName,
+    landlordId,
+    landlordAddress,
+    tenantName,
+    tenantId,
+    tenantAddress,
+    propertyAddress,
+    monthlyRent,
+    depositAmount,
+    startDate,
+    endDate,
+    additionalClauses,
+    agreementType,
+    generatedDate
+  } = req.body;
+
+  try {
+    // Insert the agreement into the database
+    const [id] = await db('lease_agreements').insert({
+      user_id: req.user.id,
+      landlord_name: landlordName,
+      landlord_id: landlordId,
+      landlord_address: landlordAddress,
+      tenant_name: tenantName,
+      tenant_id: tenantId,
+      tenant_address: tenantAddress,
+      property_address: propertyAddress,
+      monthly_rent: monthlyRent,
+      deposit_amount: depositAmount,
+      start_date: startDate,
+      end_date: endDate,
+      additional_clauses: additionalClauses,
+      agreement_type: agreementType,
+      generated_date: generatedDate,
+      created_at: new Date(),
+      updated_at: new Date(),
+       // Assuming you have user authentication
+    }).returning('id');
+
+    res.status(201).json({ id, message: 'Lease agreement saved successfully' });
+  } catch (error) {
+    console.error('Error saving lease agreement:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/api/user-lease-agreements',authenticateToken, async (req, res) => {
+  try {
+    // In a real implementation, you would get the user ID from the session or JWT
+    const userId = req.user.id; // This would come from authentication
+    
+    
+    const agreements = await db('lease_agreements')
+      .where('user_id', userId)
+      .orderBy('created_at', 'desc');
+
+    res.status(200).json(agreements);
+  } catch (error) {
+    console.error('Error retrieving user agreements:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Example route for retrieving a specific agreement
+app.get('/api/lease-agreements/:id', async (req, res) => {
+  const agreementId = parseInt(req.params.id, 10);
+
+  if (isNaN(agreementId)) {
+    return res.status(400).json({ message: 'Invalid agreement ID' });
+  }
+
+  try {
+    const agreement = await db('lease_agreements').where('id', agreementId).first();
+
+    if (agreement) {
+      res.status(200).json(agreement);
+    } else {
+      res.status(404).json({ message: 'Agreement not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving agreement:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Example route for retrieving user's agreements
+app.get('/api/user-lease-agreements/:userId', async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    const agreements = await db('lease_agreements')
+      .where('user_id', userId)
+      .orderBy('created_at', 'desc');
+
+    res.status(200).json(agreements);
+  } catch (error) {
+    console.error('Error retrieving user agreements:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/api/lease-agreements/:id', async (req, res) => {
+  const agreementId = parseInt(req.params.id, 10);
+
+  if (isNaN(agreementId)) {
+    return res.status(400).json({ message: 'Invalid agreement ID' });
+  }
+
+  try {
+    // In a real implementation, you would verify the user owns this agreement
+    const deletedAgreement = await db('lease_agreements').where('id', agreementId).del();
+
+    if (deletedAgreement) {
+      res.status(200).json({ message: 'Agreement deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Agreement not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting agreement:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
