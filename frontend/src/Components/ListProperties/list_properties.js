@@ -1,5 +1,5 @@
 import Logout from '../Logout/logout';
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import {useNavigate, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import Axios from 'axios';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Logout from "../Logout/logout";
 import SortComponent from "../Sort Component/SortComponent";
 import { Link } from "react-router-dom";

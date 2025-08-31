@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { LikedPropertiesContext } from '../LikedPropertiesContext/LikedPropertiesContext';
 import Footer from '../Footer/footer';

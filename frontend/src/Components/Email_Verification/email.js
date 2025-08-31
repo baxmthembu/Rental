@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const EmailVerification = () => {
             const email = params.get('email');
 
             try {
-                const response = await Axios.get(`http://localhost:3001/verify-email?token=${token}&email=${email}`);
+                const response = await Axios.get(`${process.env.REACT_APP_API_URL}/verify-email?token=${token}&email=${email}`);
 
                 if (response.status === 200) {
                     setMessage('Email verified successfully! You can now log in.');

@@ -1,5 +1,5 @@
 // src/pages/Advertising.js
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer/footer';
 import { LikedPropertiesContext } from '../LikedPropertiesContext/LikedPropertiesContext';
@@ -37,7 +37,7 @@ const Advertising = () => {
 
     const token = localStorage.getItem("token");
     if (!token) return;
-    
+
     try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/advertising-inquiry`, {
       method: 'POST',
