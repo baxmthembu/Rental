@@ -1,44 +1,28 @@
-/*import { useEffect } from "react";
-
-const ClearStorage = () => {
-    useEffect(() => {
-        const closeTab = async(event) => {
-            const id = localStorage.getItem('userId')
-            
-            if(!id) return;
-
-            if(event.currentTarget.perfomance.navigation.type !== 1){
-                localStorage.clear()
-            }
-        }
-
-        window.addEventListener('unload', closeTab);
-
-        return () => {
-            window.removeEventListener('unload', closeTab)
-        }
-    }, []);
-    return null;
-}
-
-export default ClearStorage*/
-
 import { useEffect } from "react";
 
 const ClearStorage = () => {
     useEffect(() => {
-        const handleUnload = (event) => {
-            // Check if the user is closing the tab or window
-            if (window.performance.getEntriesByType("navigation")[0].type !== "reload") { // 1 indicates reload
-                localStorage.clear()
+        // Check if this is a new session
+        if (!sessionStorage.getItem('sessionActive')) {
+            // Clear localStorage for new sessions
+            localStorage.clear();
+            // Mark this session as active
+            sessionStorage.setItem('sessionActive', 'true');
+        }
+
+        const handleBeforeUnload = () => {
+            // Check if this is likely a tab close
+            if (!sessionStorage.getItem('isReloading')) {
+                localStorage.clear();
             }
         };
 
-        // Attach the `beforeunload` event listener
-        window.addEventListener("unload", handleUnload);
+        // Add event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener("unload", handleUnload);
+            // Clean up event listener
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
 
@@ -46,30 +30,3 @@ const ClearStorage = () => {
 };
 
 export default ClearStorage;
-
-
-/*import { useEffect } from "react";
-
-const ClearStorage = () => {
-    useEffect(() => {
-        const handleUnload = () => {
-            const id = localStorage.getItem("userId");
-
-            if (!id) return;
-
-            // Clear localStorage when the tab/window is closed
-            localStorage.clear();
-        };
-
-        // Listen for the `beforeunload` event to handle tab/window closures
-        window.addEventListener("beforeunload", handleUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleUnload);
-        };
-    }, []);
-
-    return null;
-};
-
-export default ClearStorage;*/

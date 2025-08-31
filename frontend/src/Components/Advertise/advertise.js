@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer/footer';
 import { LikedPropertiesContext } from '../LikedPropertiesContext/LikedPropertiesContext';
+import Logout from '../Logout/logout';
 
 const Advertising = () => {
   const { likedProperties } = useContext(LikedPropertiesContext);
@@ -17,6 +18,7 @@ const Advertising = () => {
     message: '',
     preferredContact: 'email'
   });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -32,11 +34,17 @@ const Advertising = () => {
     e.preventDefault();
     // Here you would typically send the data to your backend
     console.log('Advertising inquiry:', formData);
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    
     try {
-    const response = await fetch('http://localhost:3001/api/advertising-inquiry', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/advertising-inquiry`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Accept: "application/json",
+        Authorization: `Bearer ${token.trim()}`
       },
       body: JSON.stringify(formData)
     });
@@ -70,6 +78,10 @@ const Advertising = () => {
     }, 3000);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <>
       {/* Navigation */}
@@ -98,6 +110,43 @@ const Advertising = () => {
                 <Link to="/advertising" className="nav-link bg-sa-green text-white px-3 py-2 rounded-md text-sm font-medium">Advertising</Link>
                 <Link to="/about" className="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">About</Link>
                 <Link to="/login" className="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Sign In</Link>
+                <Logout />
+              </div>
+            </div>
+            <div className="md:hidden">
+              <button 
+                id="mobile-menu-btn" 
+                className="text-gray-700 hover:text-sa-green focus:outline-none"
+                onClick={toggleMobileMenu}
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+            <a href="#" className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Find Homes</a>
+            <Link to='/list_properties' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">List Property</Link>
+            <Link to='/properties' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Listed Properties</Link>
+            <Link to='/favourites' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md flex items-center">
+              Saved Properties
+              {likedProperties.length > 0 && (
+                <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {likedProperties.length}
+                </span> 
+              )}
+            </Link>
+            <Link to='/financing' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Financing</Link>
+            <Link to='/about' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">About</Link>
+            <div className="pt-2 border-t border-gray-200">
+              <button className="w-20 text-left px-3 py-2 bg-sa-green text-white rounded-md hover:bg-green-700">
+                <Link to="/" className="block">Sign In</Link>
+              </button>
+              <div className="mt-2">
+                <Logout />
               </div>
             </div>
           </div>

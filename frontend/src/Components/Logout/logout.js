@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { WorkerContext } from '../WorkerContext';
-import './logout.css'
+
 import { useAuth } from '../../provider/authProvider';
 
 const Logout = () => {
@@ -28,7 +28,7 @@ const Logout = () => {
                     setUser(null)
                     setToken(null)
                     localStorage.clear()
-                    navigate('/', {replace: true})
+                    navigate('/login', {replace: true})
                 }
                 // Navigate to a dummy route and then to login to force re-render
                 navigate('/dummy');
@@ -46,11 +46,6 @@ const Logout = () => {
 
     return (
         <>
-        {/*<div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button className="button-28" onClick={handleLogout}>
-                Logout
-            </button>
-        </div>*/}
         <button class="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700" onClick={handleLogout}>Logout</button>
         </>
     );

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
-import './properties.css';
 import { Link } from 'react-router-dom';
 import Logout from '../Logout/logout';
 import SortComponent from '../Sort Component/SortComponent';
@@ -13,6 +12,7 @@ const Properties = () => {
     const { likedProperties } = useContext(LikedPropertiesContext);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     
 
 
@@ -108,90 +108,12 @@ const Properties = () => {
         window.scrollTo({ top: 0, behavior: "smooth" }); // Optional: scroll to top on page change
     }; 
 
+    const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
     return (
         <>
-        {/*<div className='properties-container'>
-            <div id='home-back'>
-                <Link to='/card'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id='home-back-logo'><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM215 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L392 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-214.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L103 273c-9.4-9.4-9.4-24.6 0-33.9L215 127z"/></svg></Link>
-            </div>
-        <header>
-          <div className="header">
-                <img src={image} alt="rental" id="header-img"/>
-            </div>
-        </header>
-        <div id='property-logout'>
-        <Logout id="property-logout" />
-        </div>
-        <div>
-        <div id='properties-redirect'>
-            <Redirect id='property-redirect'/><br />
-        </div><br />
-            <h1 id='properties-header'>Your Listed Properties</h1>
-            <div className="sort-container">
-                <SortComponent handleSort={handleSort} />
-            </div>
-            <div className="cards-container">
-                {currentItems.length > 0 ? (
-                    currentItems.map(property => (
-                        <div key={property.id} className="cards">
-                            <div className="carouselss">
-                                <button className="prev" onClick={() => handlePrevImage(property.id)}>❮</button>
-                                <img
-                                    src={property.image_url[currentImageIndex[property.id] || 0]}
-                                    alt="Property"
-                                    className="property_images"
-                                />
-                                <button className="next" onClick={() => handleNextImage(property.id)}>❯</button>
-                            </div>
-                            <div className="cards-content">
-                            <div className="property_prices">R {property.price}</div>
-                            <div className="property_addresses">{property.address}</div>
-                            <div className="property_descriptions">{property.description}</div>
-                            <div className="property_detail">
-                                <div className="property_detail_item">
-                                    <i className="property_detail_icons">🛏️</i>{property.bedrooms} Bedrooms
-                                </div>
-                                <div className="property_detail_item">
-                                    <i className="property_detail_icon">🛁</i>{property.bathrooms} Bathrooms
-                                </div>
-                            </div>
-                            </div>
-                            <div className="cards-overlay">
-                                <button 
-                                    className="delete-button" 
-                                    onClick={() => handleDelete(property.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>No properties found.</p>
-                )}
-            </div>
-            <div className="paginations-container">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                        key={page}
-                        onClick={() => handlePageClick(page)}
-                        style={{
-                            margin: "0 5px",
-                            padding: "8px 12px",
-                            backgroundColor: currentPage === page ? "#333" : "#ccc",
-                            color: currentPage === page ? "#fff" : "#000",
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer"
-                        }}
-                    >
-                    {page}
-                    </button>
-                ))}
-            </div>
-        </div>
-        </div>*/}
         <div>
             <nav className="bg-white shadow-lg sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -217,6 +139,43 @@ const Properties = () => {
                                 <Link to='/financing' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">Financing</Link>
                                 <Link to='/about' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">About</Link>
                                 <Link to="/login" className="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Sign In</Link>
+                                <Logout />
+                            </div>
+                        </div>
+                        <div className="md:hidden">
+                            <button 
+                                id="mobile-menu-btn" 
+                                className="text-gray-700 hover:text-sa-green focus:outline-none"
+                                onClick={toggleMobileMenu}
+                            >
+                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {/* Mobile Menu */}
+                <div className={`md:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+                        <a href="#" className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Find Homes</a>
+                        <Link to='/list_properties' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">List Property</Link>
+                        <Link to='/properties' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Listed Properties</Link>
+                        <Link to='/favourites' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md flex items-center">
+                            Saved Properties
+                            {likedProperties.length > 0 && (
+                                <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {likedProperties.length}
+                                </span> 
+                            )}
+                        </Link>
+                        <Link to='/financing' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Financing</Link>
+                        <Link to='/about' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">About</Link>
+                        <div className="pt-2 border-t border-gray-200">
+                            <button className="w-20 text-left px-3 py-2 bg-sa-green text-white rounded-md hover:bg-green-700">
+                                <Link to="/" className="block">Sign In</Link>
+                            </button>
+                            <div className="mt-2">
                                 <Logout />
                             </div>
                         </div>

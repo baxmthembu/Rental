@@ -36,9 +36,9 @@ const Footer = () => {
                         <h4 class="text-lg font-semibold mb-4">For Tenants</h4>
                         <ul class="space-y-2 text-gray-400">
                             <li><Link to='/home' class="hover:text-white">Search Properties</Link></li>
-                            <li><a href="#" class="hover:text-white">Verified Listings</a></li>
+                            {/*<li><a href="#" class="hover:text-white">Verified Listings</a></li>
                             <li><a href="#" class="hover:text-white">Tenant Screening</a></li>
-                            <li><a href="#" class="hover:text-white">Rental Assistance</a></li>
+                            <li><a href="#" class="hover:text-white">Rental Assistance</a></li>*/}
                             <li><Link to="/lease" class="hover:text-white">Lease Agreement</Link></li>
                         </ul>
                     </div>
@@ -46,9 +46,9 @@ const Footer = () => {
                         <h4 class="text-lg font-semibold mb-4">For Landlords</h4>
                         <ul class="space-y-2 text-gray-400">
                             <li><Link to='/list_properties' class="hover:text-white">List Property</Link></li>
-                            <li><a href="#" class="hover:text-white">Subscription Plans</a></li>
+                            {/*<li><a href="#" class="hover:text-white">Subscription Plans</a></li>
                             <li><a href="#" class="hover:text-white">Tenant Verification</a></li>
-                            <li><a href="#" class="hover:text-white">Property Management</a></li>
+                            <li><a href="#" class="hover:text-white">Property Management</a></li>*/}
                         </ul>
                     </div>
                     <div>
@@ -57,7 +57,7 @@ const Footer = () => {
                             <li><Link to='/about' class="hover:text-white">About Us</Link></li>
                             <li><Link to='/financing' class="hover:text-white">Financing Partners</Link></li>
                             <li><Link to="/advertise" class="hover:text-white">Advertise</Link></li>
-                            <li><a href="#" class="hover:text-white">Contact</a></li>
+                            {/*<li><a href="#" class="hover:text-white">Contact</a></li>*/}
                         </ul>
                     </div>
                 </div>
