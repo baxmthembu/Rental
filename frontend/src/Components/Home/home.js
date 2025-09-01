@@ -34,8 +34,8 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (!token) return;
+                /*const token = localStorage.getItem("token");
+                if (!token) return;*/
 
                 const params = new URLSearchParams(location.search);
                 const address = params.get("address") || "";
@@ -44,8 +44,8 @@ const Home = () => {
                 const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`, {
                     headers: {
                         "Content-type": "application/json",
-                        Accept: "application/json",
-                        Authorization: `Bearer ${token.trim()}`
+                        /*Accept: "application/json",
+                        Authorization: `Bearer ${token.trim()}`*/
                     },
                 });
 
