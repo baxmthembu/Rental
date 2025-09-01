@@ -22,13 +22,18 @@ const Logout = () => {
         } catch (error) {
             console.error('Error logging out:', error);
             // Even if server logout fails, we'll still clear client state
-        } finally {
-            // Always clear client state and navigate
-            setUser(null);
-            setToken(null);
-            localStorage.clear();
-            navigate('/login', { replace: true });
         }
+        
+        // Clear client state regardless of server response
+        setUser(null);
+        setToken(null);
+        localStorage.clear();
+        
+        // Navigate to login page
+        navigate('/login', { replace: true });
+        
+        // Force a reload to ensure complete reset
+        window.location.reload();
     };
 
     return (
