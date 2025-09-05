@@ -35,6 +35,7 @@ export const ProtectedRoute = () => {
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
         });
 

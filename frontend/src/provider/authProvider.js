@@ -97,6 +97,7 @@ export const AuthProvider = ({ children }) => {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
+                        Accept: 'application/json',
                     },
                 });
 
@@ -116,7 +117,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await fetch('http://localhost:3001/logout', {
+            await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
