@@ -29,12 +29,12 @@ app.use(json())
 app.use(urlencoded({ extended: false }));
 const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
-  origin: 'http://localhost:3003',
+  origin: 'https://rentekasi.com',
   credentials: true,
   exposedHeaders: ['set-cookie'],
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003'); // Update to match the domain you will make the request from
+  res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com'); // Update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
