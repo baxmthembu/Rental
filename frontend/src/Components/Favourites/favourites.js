@@ -4,6 +4,7 @@ import SortComponent from "../Sort Component/SortComponent";
 import { Link } from "react-router-dom";
 import Footer from "../Footer/footer";
 import { LikedPropertiesContext } from "../LikedPropertiesContext/LikedPropertiesContext";
+import { useNavigate } from "react-router-dom";
 
 const Favourites = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState({});
@@ -13,8 +14,9 @@ const Favourites = () => {
     const { likedProperties } = useContext(LikedPropertiesContext);
     const itemsPerPage = 6;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchFavoriteProperties = async () => {
             try {
                 // If no liked properties, set empty array and return
@@ -51,7 +53,57 @@ const Favourites = () => {
         };
 
         fetchFavoriteProperties();
-    }, [likedProperties]);
+    }, [likedProperties]);*/
+
+    useEffect(() => {
+        const fetchFavoriteProperties = async () => {
+            try {
+                // If no liked properties, set empty array and return
+                if (likedProperties.length === 0) {
+                    setFavoriteProperties([]);
+                    return;
+                }
+
+                const ids = likedProperties.join(',');
+      
+                // Remove Authorization header and use credentials instead
+                const response = await fetch(
+                    `${process.env.REACT_APP_API_URL}/properties-by-ids?ids=${ids}`/*`http://localhost:3001/properties-by-ids?ids=${ids}`*/, 
+                    {
+                        method: 'GET',
+                        credentials: 'include', // This sends cookies with the request
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                    }
+                );
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // Token is invalid or expired
+                        console.error("Authentication failed");
+                        // You might want to redirect to login here
+                        navigate('/login', {replace:true} );
+                        return;
+                    }
+                    throw new Error("Failed to fetch favorite properties");
+                }
+
+                const data = await response.json();
+                const processedData = data.map((user) => ({
+                    ...user,
+                    image_url: Array.isArray(user.image_url) ? user.image_url : user.image_url.split(","),
+                }));
+
+                setFavoriteProperties(processedData);
+            } catch (error) {
+                console.error("Error fetching favorite properties:", error);
+            }
+        };
+
+        fetchFavoriteProperties();
+    }, [likedProperties, navigate]);
 
     const handlePrevImage = (userId) => {
         setCurrentImageIndex((prevState) => ({

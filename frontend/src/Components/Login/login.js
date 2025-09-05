@@ -1,14 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Axios from "axios";
-import { WorkerContext } from "../WorkerContext";
 import { useNavigate, Link } from "react-router-dom";
 import DOMPurify from 'dompurify';
 import { useAuth } from "../../provider/authProvider";
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const {setUser} = useContext(WorkerContext)
-    const {setToken} = useAuth()
+    const {setUser} = useAuth()
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -46,48 +44,52 @@ const Login = () => {
         return DOMPurify.sanitize(value);
     };
 
-
     const ProceedLogin = async(e) => {
-        e.preventDefault()
-        setIsLoading(true)
+    e.preventDefault()
+    setIsLoading(true)
 
-         // Sanitize input fields to prevent XSS attacks
-         const sanitizedFormData = {
-            email: sanitizeInput(formData.email),
-            password: formData.password
-        };
+    // Sanitize input fields to prevent XSS attacks
+    const sanitizedFormData = {
+      email: sanitizeInput(formData.email),
+      password: formData.password
+    };
 
-        const validationResponse = Validate(sanitizedFormData);
-        setErrors(validationResponse.errors);
+    const validationResponse = Validate(sanitizedFormData);
+    setErrors(validationResponse.errors);
 
-
-        if (!validationResponse.isValid) {
-            setIsLoading(false);
-            return;
-        }
-        try{
-            const response = await Axios.post(`${process.env.REACT_APP_API_URL}/login`, sanitizedFormData)
-            if(response.status === 200){
-                console.log('logged in')
-                const userId = response.data.user.id;
-                const token = response.data.user.token
-                localStorage.setItem('userId', userId)
-                localStorage.setItem('token', 'Bearer ' + token)
-                setUser({id: userId, role:'owner'})
-                setToken(token)
-                navigate('/home',{ replace: true })
-            }
-        }catch(error){
-            if (error.response && error.response.status === 401) {
-                setErrors({ password: 'Incorrect password or email' });
-            } else {
-                console.error('Error:', error);
-            }
-        }finally{
-            setIsLoading(false)
-        }
-    
+    if (!validationResponse.isValid) {
+      setIsLoading(false);
+      return;
     }
+    
+    try {
+      // Make sure to include credentials to allow cookies
+      const response = await Axios.post(`${process.env.REACT_APP_API_URL}/login`, sanitizedFormData, {
+        withCredentials: true, // This is important for cookies,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
+      });
+      
+      if(response.status === 200){
+        console.log('logged in')
+        const userId = response.data.user.id;
+        // No longer need to store token in localStorage
+        localStorage.setItem('userId', userId)
+        setUser(response.data.user); // Update context with full user data
+        navigate('/home', {replace:true} )
+      }
+    } catch(error) {
+      if (error.response && error.response.status === 401) {
+        setErrors({ password: 'Incorrect password or email' });
+      } else {
+        console.error('Error:', error);
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
     const handleChange = (e) => {
         const { name, value } = e.target;

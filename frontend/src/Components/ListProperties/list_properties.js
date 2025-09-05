@@ -81,11 +81,11 @@ const ListProperties = () => {
 
         setLoading(true); // Start spinner
         try {
-            const token = localStorage.getItem("token")
             const response = await Axios.post(`${process.env.REACT_APP_API_URL}/property_info`, formDataWithFile, {
+              withCredentials: true,
                 headers: { 
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token.trim()}`
+                    Accept: "application/json",
                 },
             });
 

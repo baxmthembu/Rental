@@ -20,13 +20,12 @@ const Properties = () => {
         const fetchProperties = async () => {
             const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
            try{
-                const token = localStorage.getItem("token")
-                console.log("Token before API call:", token)
                 const response = await fetch(`${process.env.REACT_APP_API_URL}/properties/${userId}`, {
+                    method: 'GET',
+                    credentials: 'include',
                     headers: {
                         'Content-type': 'application/json',
                         Accept: 'application/json',
-                        Authorization: `Bearer ${token.trim()}`
                     },
                 });
 

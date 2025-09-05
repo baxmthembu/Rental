@@ -1,14 +1,16 @@
 import './App.css'
 import { WorkerProvider } from "./Components/WorkerContext";
-import AuthProvider from "./provider/authProvider";
+import {AuthProvider} from "./provider/authProvider";
 import Routes from "./routes";
 import ClearStorage from "./ClearStorage/clearstorage";
 import { LikedPropertiesProvider } from "./Components/LikedPropertiesContext/LikedPropertiesContext";
+import { AuthProviders } from './Components/AuthContext';
 
 
 function App(){
   return (
     <AuthProvider>
+    {/*<AuthProviders>*/}
       <WorkerProvider>
         <ClearStorage />
         <LikedPropertiesProvider>
@@ -20,6 +22,7 @@ function App(){
           <Routes />
         </LikedPropertiesProvider>
       </WorkerProvider>
+      {/*</AuthProviders>*/}
     </AuthProvider>  
   )
 }

@@ -34,27 +34,35 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                /*const token = localStorage.getItem("token");
-                if (!token) return;*/
-
                 const params = new URLSearchParams(location.search);
                 const address = params.get("address") || "";
 
-                /*const response = await fetch(`http://localhost:3001/property?address=${address}`*/
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/property?address=${address}`,{
+                    method: 'GET',
+                    credentials: 'include', // Include cookies in the request  
                     headers: {
-                        "Content-type": "application/json",
-                        /*Accept: "application/json",
-                        Authorization: `Bearer ${token.trim()}`*/
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                     },
                 });
 
-                if (!response.ok) throw new Error("Failed to fetch data");
+                // Handle 401 Unauthorized
+                if (response.status === 401) {
+                    console.log("Token invalid or expired, redirecting to login");
+                    navigate('/login');
+                    //window.location.reload();
+                    return;
+                }
+
+                // Handle other errors
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+                }
 
                 const usersJson = await response.json();
                 const processedData = usersJson.map(user => ({
                     ...user,
-                    image_url: user.image_url.split(","),
+                    image_url: Array.isArray(user.image_url) ? user.image_url : user.image_url.split(","),
                 }));
 
                 setUsersData(processedData);
@@ -65,10 +73,11 @@ const Home = () => {
         };
 
         fetchData();
-    }, [location.search]);
+    }, [location.search, navigate]); // Add navigate to dependencies
+
 
     const handleSearch = (e) => {
-        //e.preventDefault()
+        if(e) e.preventDefault();
         navigate(`/home?address=${encodeURIComponent(searchQuery)}`);
     };
 

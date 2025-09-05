@@ -29,13 +29,16 @@ app.use(json())
 app.use(urlencoded({ extended: false }));
 const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
-  origin: 'https://rentekasi.com',
-  credentials: true
+  origin: 'http://localhost:3003',
+  credentials: true,
+  exposedHeaders: ['set-cookie'],
 }));
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com'); // Update to match the domain you will make the request from
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3003'); // Update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 app.use(express.static('public'));
@@ -84,7 +87,7 @@ const loginLimiter = rateLimit({
 },
 });
 
-const authenticateToken = (req, res, next) => {
+/*const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(" ")[1];
   console.log("Authorization header: ", token)
@@ -98,6 +101,34 @@ const authenticateToken = (req, res, next) => {
       }
       req.user = user;
       next();
+  });
+};*/
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = req.cookies.token || (authHeader && authHeader.split(' ')[1]);
+  //console.log("Authorization header: ", token);
+  
+  if (!token) {
+    console.log('No token provided');
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+    if (err) {
+      console.error('JWT verification error: ', err);
+      
+      // Provide more specific error messages
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired' });
+      } else if (err.name === 'JsonWebTokenError') {
+        return res.status(401).json({ error: 'Invalid token' });
+      } else {
+        return res.status(403).json({ error: 'Token verification failed' });
+      }
+    }
+    
+    req.user = user;
+    next();
   });
 };
 
@@ -223,7 +254,7 @@ app.post('/login',  [
       if (!user) {
           return res.status(401).json({ msg: 'Invalid Credentials' });
       }
-
+ 
       const isPasswordValid = await compare(password, user.password);
 
       if (isPasswordValid) {
@@ -235,18 +266,27 @@ app.post('/login',  [
           const token = jwt.sign(
             { id: user.id, role: 'owner' }, // Payload
             process.env.JWT_SECRET_KEY, // Replace with your actual secret key
-            //{ expiresIn: '1h' } // Token expiration time
+            { expiresIn: '4h' } // Token expiration time
         );
+
+        // Set token in HTTP-only cookie
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'/*'strict'*/,
+          maxAge: 60 * 60 * 1000, // 1 hour
+          domain: process.env.NODE_ENV === 'production' ? '.rentekasi.com' : 'localhost'
+        });
 
           res.json({
               msg: 'Authentication Successful',
-              token,
+              //token,
               user: {
                   id: user.id,
                   role: 'owner',
                   logged_in: true,
                   auth: true,
-                  token: token,
+                  //token: token,
               }
           });
           console.log('Logged in Successfully');
@@ -330,8 +370,8 @@ app.delete('/properties/:propertyId',  async (req, res) => {
   }
 });
 
-app.post('/logout',  async (req, res) => {
-  const { userId } = req.body;
+/*app.post('/logout',  async (req, res) => {
+  const { userId } = req.body; 
   const id = parseInt(userId, 10);
 
   if (isNaN(id)) {
@@ -340,10 +380,37 @@ app.post('/logout',  async (req, res) => {
 
   try {
     await db('users').where({ id }).update({logged_in: false});
+    res.clearCookie('token'); // Clear the token cookie on logout
     res.json({ msg: 'Logout Successful' });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ msg: 'An error occurred' });
+  }
+});*/
+app.post('/logout', async (req, res) => {
+  try {
+    // Get user ID from the request (could be from body or user object if authenticated)
+    const userId = req.body.userId || (req.user && req.user.id);
+    
+    if (userId) {
+      const id = parseInt(userId, 10);
+      if (!isNaN(id)) {
+        await db('users').where({ id }).update({ logged_in: false });
+      }
+    }
+    
+    // Clear the token cookie with the same options used when setting it
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+      domain: process.env.NODE_ENV === 'production' ? '.rentekasi.com' : undefined
+    });
+    
+    res.json({ msg: 'Logout Successful' });
+  } catch (error) {
+    console.error('Error during logout:', error);
+    res.status(500).json({ msg: 'An error occurred during logout' });
   }
 });
 
@@ -537,6 +604,29 @@ app.delete('/api/lease-agreements/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting agreement:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/verify-auth', authenticateToken, async (req, res) => {
+  try {
+    // Get user data from database
+    const user = await db('users')
+      .select('id', 'email', 'role')
+      .where({ id: req.user.id })
+      .first();
+
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      role: user.role
+    });
+  } catch (error) {
+    console.error('Error verifying auth:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

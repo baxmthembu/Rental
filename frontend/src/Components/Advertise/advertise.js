@@ -35,16 +35,13 @@ const Advertising = () => {
     // Here you would typically send the data to your backend
     console.log('Advertising inquiry:', formData);
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
     try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/advertising-inquiry`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: "application/json",
-        Authorization: `Bearer ${token.trim()}`
       },
       body: JSON.stringify(formData)
     });
