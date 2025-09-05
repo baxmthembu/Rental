@@ -4,7 +4,7 @@ import {AuthProvider} from "./provider/authProvider";
 import Routes from "./routes";
 import ClearStorage from "./ClearStorage/clearstorage";
 import { LikedPropertiesProvider } from "./Components/LikedPropertiesContext/LikedPropertiesContext";
-import { AuthProviders } from './Components/AuthContext';
+//import { AuthProviders } from './Components/AuthContext';
 
 
 function App(){
