@@ -272,10 +272,10 @@ app.post('/login',  [
         // Set token in HTTP-only cookie
         res.cookie('token', token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'/*'strict'*/,
-          maxAge: 60 * 60 * 1000, // 1 hour
-          domain: process.env.NODE_ENV === 'production' ? '.rentekasi.com' : 'localhost'
+          secure: true,//process.env.NODE_ENV === 'production', // Use secure cookies in production
+          sameSite: none, //process.env.NODE_ENV === 'production' ? 'none' : 'lax'/*'strict'*/,
+          maxAge: 4 * 60 * 60 * 1000, // 1 hour
+          domain: 'rentekasi.com'//process.env.NODE_ENV === 'production' ? 'rentekasi.com' : 'localhost'
         });
 
           res.json({

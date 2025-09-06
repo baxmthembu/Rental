@@ -63,8 +63,12 @@ const Login = () => {
     }
     
     try {
+      const apiUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://api.rentekasi.com/login'  // Your backend API domain
+      : `${process.env.REACT_APP_API_URL}/login`;
+
       // Make sure to include credentials to allow cookies
-      const response = await Axios.post(`${process.env.REACT_APP_API_URL}/login`, sanitizedFormData, {
+      const response = await Axios.post(apiUrl, sanitizedFormData, {
         withCredentials: true, // This is important for cookies,
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +81,12 @@ const Login = () => {
         const userId = response.data.user.id;
         // No longer need to store token in localStorage
         localStorage.setItem('userId', userId)
-        setUser(response.data.user); // Update context with full user data
+        //setUser(response.data.user); // Update context with full user data
+        setUser({
+    id: userId,
+    role: 'owner',
+    auth: true
+  });
         navigate('/home', {replace:true} )
       }
     } catch(error) {

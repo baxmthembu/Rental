@@ -40,17 +40,15 @@ const LeaseAgreement = () => {
   const downloadLeaseAgreement = async () => {
     setIsSubmitting(true);
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
 
     try {
       // Save the agreement to the database first
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/lease-agreements`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           Accept: "application/json",
-          Authorization: `Bearer ${token.trim()}`
         },
         body: JSON.stringify({
           ...formData,
