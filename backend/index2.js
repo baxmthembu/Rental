@@ -27,20 +27,20 @@ const {sendAdvertisingNotifications} = require('../frontend/src/Components/Email
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
-const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
+//const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
   origin: 'https://rentekasi.com',
   credentials: true,
   exposedHeaders: ['set-cookie'],
 }));
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com'); // Update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
   res.header('Access-Control-Allow-Credentials', true);
   next();
-});
+});*/
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json())
@@ -270,13 +270,21 @@ app.post('/login',  [
         );
 
         // Set token in HTTP-only cookie
-        res.cookie('token', token, {
+        /*res.cookie('token', token, {
           httpOnly: true,
           secure: true,//process.env.NODE_ENV === 'production', // Use secure cookies in production
-          sameSite: none, //process.env.NODE_ENV === 'production' ? 'none' : 'lax'/*'strict'*/,
+          sameSite: 'none', //process.env.NODE_ENV === 'production' ? 'none' : 'lax'/*'strict'*,
           maxAge: 4 * 60 * 60 * 1000, // 1 hour
-          domain: 'rentekasi.com'//process.env.NODE_ENV === 'production' ? 'rentekasi.com' : 'localhost'
-        });
+          domain: process.env.NODE_ENV === 'production' ? '.rentekasi.com' : 'localhost'
+        });*/
+        // Set token in HTTP-only cookie
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: isProduction, // true in production, false in development
+  sameSite: isProduction ? 'none' : 'lax', // 'none' in production, 'lax' in development
+  maxAge: 4 * 60 * 60 * 1000, // 4 hours
+  domain: isProduction ? '.rentekasi.com' : 'localhost'
+});
 
           res.json({
               msg: 'Authentication Successful',

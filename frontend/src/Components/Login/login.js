@@ -65,7 +65,7 @@ const Login = () => {
     try {
 
       // Make sure to include credentials to allow cookies
-      const response = await Axios.post(`${process.env.REACT_APP_API_URL}`, sanitizedFormData, {
+      const response = await Axios.post(`${process.env.REACT_APP_API_URL}/login`, sanitizedFormData, {
         withCredentials: true, // This is important for cookies,
         headers: {
           'Content-Type': 'application/json',
