@@ -63,12 +63,9 @@ const Login = () => {
     }
     
     try {
-      const apiUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://api.rentekasi.com/login'  // Your backend API domain
-      : `${process.env.REACT_APP_API_URL}/login`;
 
       // Make sure to include credentials to allow cookies
-      const response = await Axios.post(apiUrl, sanitizedFormData, {
+      const response = await Axios.post(`${process.env.REACT_APP_API_URL}`, sanitizedFormData, {
         withCredentials: true, // This is important for cookies,
         headers: {
           'Content-Type': 'application/json',
