@@ -78,12 +78,12 @@ const Login = () => {
         const userId = response.data.user.id;
         // No longer need to store token in localStorage
         localStorage.setItem('userId', userId)
-        //setUser(response.data.user); // Update context with full user data
-        setUser({
+        setUser(response.data.user); // Update context with full user data
+        /*setUser({
     id: userId,
     role: 'owner',
     auth: true
-  });
+  });*/
         navigate('/home', {replace:true} )
       }
     } catch(error) {
