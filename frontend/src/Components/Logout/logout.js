@@ -9,7 +9,7 @@ import { useAuth } from '../../provider/authProvider';
 const Logout = () => {
     //const { user, setUser } = useContext(WorkerContext);
     const { user, setUser } = useAuth();
-    const { setToken } = useAuth();
+    //const { setToken } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
