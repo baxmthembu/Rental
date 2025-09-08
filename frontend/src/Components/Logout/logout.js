@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../provider/authProvider';
 
 
-/*const Logout = () => {
+const Logout = () => {
     const { user, setUser } = useContext(WorkerContext);
     const { setToken } = useAuth();
     const navigate = useNavigate();
@@ -15,13 +15,15 @@ import { useAuth } from '../../provider/authProvider';
         try {
             // Send the logout request to the server if user exists
             if (user && user.id) {
-                /*await Axios.post(`${process.env.REACT_APP_API_URL}/logout`, {
-                    userId: user.id
-                });*
-                await Axios.post('http://localhost:3001/logout', {}, {
-                    withCredentials: true,
-                    userId: user.id
-                })
+                 await Axios.post(`${process.env.REACT_APP_API_URL}/logout`, 
+                    { userId: user.id }, // Correct placement of userId in request body
+                    {
+                        withCredentials: true,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
             }
         } catch (error) {
             console.error('Error logging out:', error);
@@ -48,9 +50,9 @@ import { useAuth } from '../../provider/authProvider';
             Logout
         </button>
     );
-};*/
+};
 
-const Logout = () => {
+/*const Logout = () => {
     const navigate = useNavigate();
     const { user, setUser } = useAuth();
 
@@ -87,6 +89,6 @@ const Logout = () => {
             Logout
         </button>
     );
-};
+};*/
 
 export default Logout;
