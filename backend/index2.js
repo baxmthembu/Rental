@@ -24,15 +24,17 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { error, Console } = require('console');
 const {sendAdvertisingNotifications} = require('../frontend/src/Components/Email_Service/emailService'); // Adjust the path as necessary
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(json())
 app.use(urlencoded({ extended: false }));
-//const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
+const allowedOrigins = ['https://rentekasi.com', 'http://localhost:3003'];
 app.use(cors({
-  origin: 'https://rentekasi.com',
+  origin: 'https://rentekasi.com', // Update to match the domain you will make the request from
   credentials: true,
   exposedHeaders: ['set-cookie'],
 }));
+
 /*app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'https://rentekasi.com'); // Update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -131,8 +133,6 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 app.get('/protected', authenticateToken, (req, res) => {
   res.send('This is a protected route');
@@ -284,7 +284,7 @@ app.post('/login',  [
           secure: isProduction, // true in production, false in development
           sameSite: isProduction ? 'none' : 'lax', // 'none' in production, 'lax' in development
           maxAge: 4 * 60 * 60 * 1000, // 4 hours
-          domain: isProduction ? '.rentekasi.com' : 'localhost'
+          //domain: isProduction ? '.rentekasi.com' : 'localhost'
         });
 
           res.json({
