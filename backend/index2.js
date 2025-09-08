@@ -132,6 +132,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.get('/protected', authenticateToken, (req, res) => {
   res.send('This is a protected route');
@@ -278,13 +279,13 @@ app.post('/login',  [
           domain: process.env.NODE_ENV === 'production' ? '.rentekasi.com' : 'localhost'
         });*/
         // Set token in HTTP-only cookie
-res.cookie('token', token, {
-  httpOnly: true,
-  secure: isProduction, // true in production, false in development
-  sameSite: isProduction ? 'none' : 'lax', // 'none' in production, 'lax' in development
-  maxAge: 4 * 60 * 60 * 1000, // 4 hours
-  domain: isProduction ? '.rentekasi.com' : 'localhost'
-});
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: isProduction, // true in production, false in development
+          sameSite: isProduction ? 'none' : 'lax', // 'none' in production, 'lax' in development
+          maxAge: 4 * 60 * 60 * 1000, // 4 hours
+          domain: isProduction ? '.rentekasi.com' : 'localhost'
+        });
 
           res.json({
               msg: 'Authentication Successful',
