@@ -711,7 +711,7 @@ const Financing = () => {
                         <Link to='/about' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">About</Link>
                         <div className="pt-2 border-t border-gray-200">
                             <button className="w-20 text-left px-3 py-2 bg-sa-green text-white rounded-md hover:bg-green-700">
-                                <Link to="/login" className="block">Sign In</Link>
+                                <Link to="/" className="block">Sign In</Link>
                             </button>
                             <div className="mt-2">
                                 <Logout />

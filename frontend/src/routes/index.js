@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { useAuth } from "../provider/authProvider";
+//import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import SearchBar from "../Components/SearchBar/searchbar";
 import Properties from "../Components/Properties/properties"
@@ -15,11 +15,23 @@ import LeaseAgreement from "../Components/Lease_Agreement/lease";
 
 
 const Routes = () => {
-    /*The useAuth hook is called to retrieve the token value from the authentication context. 
-      It allows us to access the authentication token within the Routes component.*/
-    const {token} = useAuth()
+    // Define public routes accessible to all users
+    const routesForPublic = [
+        /*{
+            path: "/",
+            element: <Home />,
+        },*/
+        {
+            path: "/",
+            element: <Login />,
+        },
+        {
+            path: "/register",
+            element: <Register />,
+        },
+    ];
 
-    //routes accessible only to authenticated users
+    // Define routes accessible only to authenticated users
     const routesForAuthenticatedOnly = [
         {
             path: "/",
@@ -27,72 +39,53 @@ const Routes = () => {
             children: [
                 {
                     path: "/searchbar",
-                    element: <SearchBar />
-                },
-                {
-                    path: "/home",
-                    element: <Home />
+                    element: <SearchBar />,
                 },
                 {
                     path: "/list_properties",
-                    element: <ListProperties />
+                    element: <ListProperties />,
                 },
                 {
                     path: "/properties",
-                    element: <Properties />
+                    element: <Properties />,
                 },
                 {
                     path: "/favourites",
-                    element: <Favorites />
+                    element: <Favorites />,
                 },
                 {
                     path: "/about",
-                    element: <AboutUs />
+                    element: <AboutUs />,
                 },
                 {
                     path: "/financing",
-                    element: <Financing /> 
+                    element: <Financing />,
                 },
                 {
                     path: "/advertise",
-                    element: <Advertising />
+                    element: <Advertising />,
                 },
                 {
                     path: "/lease",
-                    element: <LeaseAgreement />
-                }
-            ]
-        }
-    ]
-
-    //routes accessible only to none authenticated users
-    const routesForNotAuthenticatedOnly = [
-        {
-            path: "/login",
-            element: <Login />
+                    element: <LeaseAgreement />,
+                },
+                 {
+                    path: "/home",
+                    element: <Home />
+                },
+            ],
         },
-        {
-            path: "/register",
-            element: <Register />
-        },
-    ]
+    ];
 
-    // Catch-all route to handle 404s
-    const catchAllRoute = {
-        path: "*",
-        element: token ? <Home /> : <Login />  // Redirect based on authentication state
-    };
 
-    //createBrowserRouter function is used to create the router configuration. It takes an array of routes as its argument
-    //the spread operator (...) is used to merge the route arrays into a single array
-    //The conditional expression (!token ? routesForNotAuthenticatedOnly : []) checks if the user is authenticated (token exists). If not, it includes the routesForNotAuthenticatedOnly array; otherwise, it includes an empty array.
+    // Combine and configure routes
     const router = createBrowserRouter([
-        ...(!token ? routesForNotAuthenticatedOnly : []),
+        ...routesForPublic,
         ...routesForAuthenticatedOnly,
-        catchAllRoute
-    ])
+    ]);
 
-    return <RouterProvider router={router} />
-}
+    // Provide the router configuration
+    return <RouterProvider router={router} />;
+};
 
 export default Routes
