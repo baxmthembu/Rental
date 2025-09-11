@@ -284,7 +284,7 @@ app.post('/login',  [
           secure: isProduction, // true in production, false in development
           sameSite: isProduction ? 'none' : 'lax', // 'none' in production, 'lax' in development
           maxAge: 4 * 60 * 60 * 1000, // 4 hours
-          domain: isProduction ? '.rentekasi.com' : 'localhost'
+          //domain: isProduction ? '.rentekasi.com' : 'localhost'
         });
 
           res.json({
