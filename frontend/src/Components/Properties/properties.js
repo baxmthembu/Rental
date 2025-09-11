@@ -194,10 +194,12 @@ const Properties = () => {
 
             {/* Main Content */}
             <div>
-                {/* Sort Component */}
-                <div className="mb-6">
+                {/* Sort Component --only show if there are listed*/}
+                {properties.length > 0 && (
+                <div className="flex justify-end mr-20 mt-4">
                     <SortComponent handleSort={handleSort} />
                 </div>
+                )}
 
                 {/* Properties Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">

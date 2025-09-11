@@ -240,7 +240,7 @@ const Favourites = () => {
 
                 {/* Sort Component - Only show if there are favorites */}
                 {favoriteProperties.length > 0 && (
-                    <div className="mb-6">
+                    <div className="flex justify-end mr-20 mt-4">
                         <SortComponent handleSort={handleSort} />
                     </div>
                 )}

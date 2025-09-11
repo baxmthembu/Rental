@@ -8,6 +8,7 @@ import Modal from '../Modal/modal';
 import Features from '../Features/featurs';
 import Footer from '../Footer/footer';
 import { LikedPropertiesContext } from '../LikedPropertiesContext/LikedPropertiesContext';
+import SortComponent from '../Sort Component/SortComponent';
 
 
 
@@ -81,7 +82,7 @@ const Home = () => {
         navigate(`/home?address=${encodeURIComponent(searchQuery)}`);
     };
 
-    const handleSort = (option) => {
+    /*const handleSort = (option) => {
         setSortOption(option);
         let sortedData = [...usersData];
         if (option === "low-to-high") {
@@ -90,6 +91,19 @@ const Home = () => {
             sortedData.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
         }
         setUsersData(sortedData);
+        setCurrentPage(1);
+    };*/
+    const handleSort = (e) => {
+        const value = e.target.value;
+        let sorted = [...usersData]; // Use favoriteProperties instead of usersData
+    
+        if (value === "lowToHigh") {
+            sorted.sort((a, b) => a.price - b.price);
+        } else if (value === "highToLow") {
+            sorted.sort((a, b) => b.price - a.price);
+        }
+    
+        setUsersData(value === "default" ? usersData : sorted);
         setCurrentPage(1);
     };
 
@@ -264,14 +278,12 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-            <div className="sort-container">
-                <label htmlFor="sort" id='sort-label'>Sort by:</label>
-                <select id="sort" value={sortOption} onChange={(e) => handleSort(e.target.value)}>
-                    <option value="">Select</option>
-                    <option value="low-to-high">Price: Low to High</option>
-                    <option value="high-to-low">Price: High to Low</option>
-                </select>
-            </div>
+            {/* Sort Component - Only show if there are favorites */}
+            {usersData.length > 0 && (
+                <div className="flex justify-end mr-20 mt-4">
+                    <SortComponent handleSort={handleSort} />
+                </div>
+            )}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
                 <div className=" grid grid-cols-1 md:grid-cols-3 gap-8">
                     {currentItems.length > 0 ? (
