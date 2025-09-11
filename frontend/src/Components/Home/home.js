@@ -19,7 +19,7 @@ const Home = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState({});
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortOption, setSortOption] = useState("");
+    //const [sortOption, setSortOption] = useState("");
     const [priceRange, setPriceRange] = useState([500, 10000]);
     const [bedroomRange, setBedroomRange] = useState(0);
     const [bathroomRange, setBathroomRange] = useState(0);
