@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { Link, useLocation, useNavigate, /*Outlet*/ } from 'react-router-dom';
 import Logout from '../Logout/logout';
 import 'rc-slider/assets/index.css';
 import FilterPanel from '../FilerPanel/filterPanel';
