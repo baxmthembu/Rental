@@ -2,7 +2,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import AuthOutlet from "./AuthOutlet";
 import RedirectAuthenticated from "./RedirectAuthenticated";
-import SearchBar from "../Components/SearchBar/searchbar";
 import Properties from "../Components/Properties/properties"
 import Login from "../Components/Login/login"
 import Register from "../Components/Register/register";
@@ -10,7 +9,6 @@ import Favorites from "../Components/Favourites/favourites";
 import AboutUs from "../Components/About_Us/about";
 import Financing from "../Components/Financing/financing";
 import ListProperties from "../Components/ListProperties/list_properties";
-//import Home from "../Components/Home/home";
 import Advertising from "../Components/Advertise/advertise";
 import LeaseAgreement from "../Components/Lease_Agreement/lease";
 
@@ -24,6 +22,7 @@ const Routes = () => {
             path: "/",
             element: <RedirectAuthenticated />,
             children: [
+                {index: true, element: <Navigate to="/login" replace/>},
                 { path: "/login", element: <Login /> },
                 { path: "/register", element: <Register /> },
             ],
@@ -36,11 +35,11 @@ const Routes = () => {
             path: "/",
             element: <AuthOutlet />,
             children: [
+                {index: true, element: <Navigate to="/home" replace/>},
                 {
                     path: "/home",
                     element: (
                         <>
-                            /<SearchBar />
                             <Outlet />
                         </>
                     ),
