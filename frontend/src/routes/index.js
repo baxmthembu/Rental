@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 //import { Outlet } from "react-router-dom";
 import AuthOutlet from "./AuthOutlet";
 import RedirectAuthenticated from "./RedirectAuthenticated";
@@ -81,7 +81,8 @@ const Routes = () => {
             path: "/",
             element: <AuthOutlet />,
             children: [
-                { path: "/home", element: <Home /> },
+                {index: true, element: <Navigate to="/home" replace/>},
+                { path: "/home", element: <Outlet /> },
                 { path: "/list_properties", element: <ListProperties /> },
                 { path: "/properties", element: <Properties /> },
                 { path: "/favourites", element: <Favorites /> },

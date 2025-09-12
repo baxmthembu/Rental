@@ -40,7 +40,7 @@ const Logout = () => {
         navigate('/login', { replace: true });
         
         // Force a reload to ensure complete reset
-        window.location.reload();
+        //window.location.reload();
     };
 
     return (
