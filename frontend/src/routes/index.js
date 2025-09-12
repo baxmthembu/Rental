@@ -10,13 +10,13 @@ import Favorites from "../Components/Favourites/favourites";
 import AboutUs from "../Components/About_Us/about";
 import Financing from "../Components/Financing/financing";
 import ListProperties from "../Components/ListProperties/list_properties";
-import Home from "../Components/Home/home";
+//import Home from "../Components/Home/home";
 import Advertising from "../Components/Advertise/advertise";
 import LeaseAgreement from "../Components/Lease_Agreement/lease";
 
 
 const Routes = () => {
-    const { token } = useAuth();
+    //const { token } = useAuth();
 
     // Define public routes accessible to all users
     const routesForPublic = [
@@ -40,7 +40,7 @@ const Routes = () => {
                     path: "/home",
                     element: (
                         <>
-                            <SearchBar />
+                            /<SearchBar />
                             <Outlet />
                         </>
                     ),
