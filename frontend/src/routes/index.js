@@ -11,6 +11,7 @@ import Financing from "../Components/Financing/financing";
 import ListProperties from "../Components/ListProperties/list_properties";
 import Advertising from "../Components/Advertise/advertise";
 import LeaseAgreement from "../Components/Lease_Agreement/lease";
+import { Navigate } from "react-router-dom";
 
 
 const Routes = () => {
