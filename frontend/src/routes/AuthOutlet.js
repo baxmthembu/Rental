@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
-import Home from "../Components/Home/home";
+//import Home from "../Components/Home/home";
 
 const AuthOutlet = () => {
     const { user, loading } = useAuth();
@@ -13,11 +13,12 @@ const AuthOutlet = () => {
         return <Navigate to="/login" replace />;
     }
 
-    return (
+    /*return (
         <Home>
             <Outlet />
         </Home>
-    );
+    );*/
+    return <Outlet />;
 };
 
 export default AuthOutlet;
