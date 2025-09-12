@@ -1,5 +1,5 @@
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+//import { Outlet } from "react-router-dom";
 import AuthOutlet from "./AuthOutlet";
 import RedirectAuthenticated from "./RedirectAuthenticated";
 import Properties from "../Components/Properties/properties"
