@@ -1,5 +1,5 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+//import { Outlet } from "react-router-dom";
 import AuthOutlet from "./AuthOutlet";
 import RedirectAuthenticated from "./RedirectAuthenticated";
 import Properties from "../Components/Properties/properties"
@@ -12,7 +12,7 @@ import ListProperties from "../Components/ListProperties/list_properties";
 import Advertising from "../Components/Advertise/advertise";
 import LeaseAgreement from "../Components/Lease_Agreement/lease";
 import { Navigate } from "react-router-dom";
-
+import Home from "../Components/Home/home";
 
 const Routes = () => {
     //const { token } = useAuth();
@@ -81,7 +81,7 @@ const Routes = () => {
             path: "/",
             element: <AuthOutlet />,
             children: [
-                { path: "/home", element: <HomeContent /> },
+                { path: "/home", element: <Home /> },
                 { path: "/list_properties", element: <ListProperties /> },
                 { path: "/properties", element: <Properties /> },
                 { path: "/favourites", element: <Favorites /> },
