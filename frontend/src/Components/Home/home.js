@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import Logout from '../Logout/logout';
 import 'rc-slider/assets/index.css';
 import FilterPanel from '../FilerPanel/filterPanel';
@@ -12,7 +12,7 @@ import SortComponent from '../Sort Component/SortComponent';
 
 
 
-const Home = () => {
+const Home = ({children}) => {
     const [usersData, setUsersData] = useState([]);
     const [originalUsersData, setOriginalUsersData] = useState([]);
     const {likedProperties, toggleLike} = useContext(LikedPropertiesContext);
@@ -183,7 +183,6 @@ const Home = () => {
                                 </span> )}</Link>
                                 <Link to='/financing' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">Financing</Link>
                                 <Link to='/about' class="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">About</Link>
-                                <button class="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700"><Link to="/">Sign In</Link></button>
                                 <Logout />
                             </div>
                         </div>
@@ -221,12 +220,13 @@ const Home = () => {
                                 <Link to="/" className="block">Sign In</Link>
                             </button>
                             <div className="mt-2">
-                                <Logout />/
+                                <Logout />
                             </div>
                         </div>
                     </div>
                 </div>
             </nav>
+            <main>{children}</main>
             <section className="bg-gradient-to-r from-sa-green to-green-600 text-white py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center">

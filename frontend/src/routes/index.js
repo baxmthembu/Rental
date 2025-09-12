@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-//import { useAuth } from "../provider/authProvider";
-import { ProtectedRoute } from "./ProtectedRoute";
+import { Outlet } from "react-router-dom";
+import AuthOutlet from "./AuthOutlet";
+import RedirectAuthenticated from "./RedirectAuthenticated";
 import SearchBar from "../Components/SearchBar/searchbar";
 import Properties from "../Components/Properties/properties"
 import Login from "../Components/Login/login"
@@ -15,19 +16,17 @@ import LeaseAgreement from "../Components/Lease_Agreement/lease";
 
 
 const Routes = () => {
+    const { token } = useAuth();
+
     // Define public routes accessible to all users
     const routesForPublic = [
-        /*{
-            path: "/",
-            element: <Home />,
-        },*/
         {
             path: "/",
-            element: <Login />,
-        },
-        {
-            path: "/register",
-            element: <Register />,
+            element: <RedirectAuthenticated />,
+            children: [
+                { path: "/login", element: <Login /> },
+                { path: "/register", element: <Register /> },
+            ],
         },
     ];
 
@@ -35,11 +34,16 @@ const Routes = () => {
     const routesForAuthenticatedOnly = [
         {
             path: "/",
-            element: <ProtectedRoute />,
+            element: <AuthOutlet />,
             children: [
                 {
-                    path: "/searchbar",
-                    element: <SearchBar />,
+                    path: "/home",
+                    element: (
+                        <>
+                            <SearchBar />
+                            <Outlet />
+                        </>
+                    ),
                 },
                 {
                     path: "/list_properties",
@@ -68,10 +72,6 @@ const Routes = () => {
                 {
                     path: "/lease",
                     element: <LeaseAgreement />,
-                },
-                 {
-                    path: "/home",
-                    element: <Home />
                 },
             ],
         },
