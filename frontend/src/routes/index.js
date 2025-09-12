@@ -31,7 +31,7 @@ const Routes = () => {
     ];
 
     // Define routes accessible only to authenticated users
-    const routesForAuthenticatedOnly = [
+    /*const routesForAuthenticatedOnly = [
         {
             path: "/",
             element: <AuthOutlet />,
@@ -73,6 +73,24 @@ const Routes = () => {
                     path: "/lease",
                     element: <LeaseAgreement />,
                 },
+            ],
+        },
+    ];*/
+     const routesForAuthenticatedOnly = [
+        {
+            path: "/",
+            element: <AuthOutlet />,
+            children: [
+                { path: "/home", element: <HomeContent /> },
+                { path: "/list_properties", element: <ListProperties /> },
+                { path: "/properties", element: <Properties /> },
+                { path: "/favourites", element: <Favorites /> },
+                { path: "/about", element: <AboutUs /> },
+                { path: "/financing", element: <Financing /> },
+                { path: "/advertise", element: <Advertising /> },
+                { path: "/lease", element: <LeaseAgreement /> },
+                // Redirect any unknown routes to home
+                { path: "*", element: <Navigate to="/home" replace /> },
             ],
         },
     ];
