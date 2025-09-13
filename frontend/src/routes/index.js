@@ -1,4 +1,4 @@
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { /*Outlet*/ RouterProvider, createBrowserRouter } from "react-router-dom";
 //import { Outlet } from "react-router-dom";
 import AuthOutlet from "./AuthOutlet";
 import RedirectAuthenticated from "./RedirectAuthenticated";
@@ -12,7 +12,7 @@ import ListProperties from "../Components/ListProperties/list_properties";
 import Advertising from "../Components/Advertise/advertise";
 import LeaseAgreement from "../Components/Lease_Agreement/lease";
 import { Navigate } from "react-router-dom";
-//import Home from "../Components/Home/home";
+import Home from "../Components/Home/home";
 
 const Routes = () => {
     //const { token } = useAuth();
@@ -82,7 +82,7 @@ const Routes = () => {
             element: <AuthOutlet />,
             children: [
                 {index: true, element: <Navigate to="/home" replace/>},
-                { path: "/home", element: <Outlet /> },
+                { path: "/home", element: <Home /> },
                 { path: "/list_properties", element: <ListProperties /> },
                 { path: "/properties", element: <Properties /> },
                 { path: "/favourites", element: <Favorites /> },
