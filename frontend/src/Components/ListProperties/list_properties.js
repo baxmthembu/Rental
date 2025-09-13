@@ -144,7 +144,7 @@ const ListProperties = () => {
                       </Link>
                       <Link to="/financing" className="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">Financing</Link>
                       <Link to="/about" className="nav-link text-gray-700 hover:text-sa-green px-3 py-2 rounded-md text-sm font-medium">About</Link>
-                      <Link to="/" className="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Sign In</Link>
+                      {/*<Link to="/" className="bg-sa-green text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Sign In</Link>*/}
                       <Logout />
                     </div>
                   </div>
@@ -178,9 +178,9 @@ const ListProperties = () => {
                   <Link to='/financing' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">Financing</Link>
                   <Link to='/about' className="block px-3 py-2 text-gray-700 hover:text-sa-green hover:bg-gray-100 rounded-md">About</Link>
                   <div className="pt-2 border-t border-gray-200">
-                    <button className="w-20 text-left px-3 py-2 bg-sa-green text-white rounded-md hover:bg-green-700">
+                    {/*<button className="w-20 text-left px-3 py-2 bg-sa-green text-white rounded-md hover:bg-green-700">
                       <Link to="/" className="block">Sign In</Link>
-                    </button>
+                    </button>*/}
                     <div className="mt-2">
                       <Logout />
                     </div>
