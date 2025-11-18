@@ -34,7 +34,7 @@ const Login = () => {
             isValid: Object.keys(newErrors).length === 0,
             errors: newErrors
         };
-    }, []);
+    }, [emailRegex]);
 
     // Simple input sanitization for better performance
     const sanitizeInput = useCallback((value) => {
