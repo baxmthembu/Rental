@@ -12,10 +12,10 @@ const Login = () => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
     
-    // Simplified email regex for basic validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     const validateForm = useCallback((data) => {
+        // Simplified email regex for basic validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
         const newErrors = {};
         
         if (!data.email?.trim()) {
@@ -34,7 +34,7 @@ const Login = () => {
             isValid: Object.keys(newErrors).length === 0,
             errors: newErrors
         };
-    }, [emailRegex]);
+    }, []);
 
     // Simple input sanitization for better performance
     const sanitizeInput = useCallback((value) => {
