@@ -2,26 +2,26 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 
 const RedirectAuthenticated = () => {
-    const { user, loading } = useAuth();
+    const { user, loading, authChecked } = useAuth();
 
-    if (loading) {
+    // Show minimal loading only during initial auth check
+    if (loading && !authChecked) {
         return (
-            <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+            <div className="min-h-screen flex items-center justify-center">
                 <div className="flex flex-col items-center">
-                    <div className="relative">
-                        <div className="w-16 h-16 border-4 border-blue-100 rounded-full"></div>
-                        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full absolute top-0 left-0 animate-spin"></div>
-                    </div>
-                    <p className="mt-4 text-lg font-medium text-gray-700">Loading...</p>
+                    <div className="w-8 h-8 border-2 border-blue-200 rounded-full"></div>
+                    <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full absolute animate-spin"></div>
                 </div>
             </div>
         );
     }
 
-    if (user) {
+    // If user is authenticated, redirect to home
+    if (user && authChecked) {
         return <Navigate to="/home" replace />;
     }
 
+    // For login/register pages, show them immediately or after quick auth check
     return <Outlet />;
 };
 

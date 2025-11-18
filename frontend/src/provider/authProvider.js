@@ -8,20 +8,34 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Changed to false by default
+    const [authChecked, setAuthChecked] = useState(false);
+
+    // Helper function to create timeout promise
+    const createTimeoutPromise = (ms) => {
+        return new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timeout')), ms);
+        });
+    };
 
     // Check if user is logged in on app start
     useEffect(() => {
         const checkAuthStatus = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/verify-auth`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                    },
-                });
+                setLoading(true);
+                
+                // Use Promise.race to add timeout - 3 seconds max for auth check
+                const response = await Promise.race([
+                    fetch(`${process.env.REACT_APP_API_URL}/verify-auth`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        },
+                    }),
+                    createTimeoutPromise(3000)
+                ]);
 
                 if (response.ok) {
                     const userData = await response.json();
@@ -29,12 +43,17 @@ export const AuthProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
+                // If auth check fails, assume user is not logged in
+                setUser(null);
             } finally {
                 setLoading(false);
+                setAuthChecked(true);
             }
         };
 
-        checkAuthStatus();
+        // Only check auth status after a small delay to prevent blocking initial render
+        const timer = setTimeout(checkAuthStatus, 100);
+        return () => clearTimeout(timer);
     }, []);
 
     const logout = async () => {
@@ -59,7 +78,8 @@ export const AuthProvider = ({ children }) => {
         user,
         setUser,
         logout,
-        loading
+        loading,
+        authChecked
     };
 
     return (
