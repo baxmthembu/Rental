@@ -302,11 +302,11 @@ const LeaseAgreement = () => {
                 <p className="text-sm mb-4">The Landlord hereby leases to the Tenant the residential property situated at {formData.propertyAddress || '[Rental Property Address]'}, South Africa (hereinafter referred to as "the Premises").</p>
                 
                 <h5 className="text-md font-bold mb-2">2. LEASE TERM</h5>
-                <p className="text-sm mb-4">The lease shall be for a fixed term of ___________________ months, commencing on {formData.startDate || '[Start Date]'} and terminating on {formData.endDate || '[End Date]'}.</p>
+                <p className="text-sm mb-4">The lease shall be for a fixed term of {formData.months || '[Number of months]'} months, commencing on {formData.startDate || '[Start Date]'} and terminating on {formData.endDate || '[End Date]'}.</p>
                 
                 <h5 className="text-md font-bold mb-2">3. RENTAL AMOUNT AND PAYMENT</h5>
                 <p className="text-sm mb-2">3.1 The monthly rental amount shall be {formData.monthlyRent ? `R${formData.monthlyRent}` : 'R[Monthly Rental Amount]'}, payable in advance on or before the first day of each calendar month.</p>
-                <p className="text-sm mb-4">3.2 Payments shall be made via electronic transfer to the following account: ___________________, Account Number: ___________________, Branch Code: ___________________.</p>
+                <p className="text-sm mb-4">3.2 Payments shall be made via electronic transfer to the following account: {formData.bankName || '[Bank Name]'}, Account Number: {formData.accountNumber || '[Account Number]'}, Branch Code: {formData.branchCode || '[Branch Code]'}.</p>
                 
                 <h5 className="text-md font-bold mb-2">4. DEPOSIT</h5>
                 <p className="text-sm mb-4">The Tenant shall pay a security deposit of {formData.depositAmount ? `R${formData.depositAmount}` : 'R[Deposit Amount]'} upon signing this agreement. This deposit shall be held by the Landlord as security for any damages to the Premises or outstanding amounts owed by the Tenant.</p>
@@ -397,35 +397,57 @@ const LeaseAgreement = () => {
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Landlord's ID Number</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="landlordId"
                   value={formData.landlordId}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
-                  placeholder="Enter ID number" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter ID number"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Landlord's Address</label>
+                <input
+                  type="text"
+                  name="landlordAddress"
+                  value={formData.landlordAddress}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter address"
                 />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Tenant's ID Number</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="tenantId"
                   value={formData.tenantId}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
-                  placeholder="Enter ID number" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter ID number"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Tenant's Address</label>
+                <input
+                  type="text"
+                  name="tenantAddress"
+                  value={formData.tenantAddress}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter address"
                 />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Property Address</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="propertyAddress"
                   value={formData.propertyAddress}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
-                  placeholder="Full rental property address" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Full rental property address"
                 />
               </div>
               <div>
@@ -441,43 +463,87 @@ const LeaseAgreement = () => {
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Deposit Amount (ZAR)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   name="depositAmount"
                   value={formData.depositAmount}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
-                  placeholder="Amount in Rands" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Amount in Rands"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Bank Name</label>
+                <input
+                  type="text"
+                  name="bankName"
+                  value={formData.bankName}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter bank name"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Account Number</label>
+                <input
+                  type="text"
+                  name="accountNumber"
+                  value={formData.accountNumber}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter account number"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Branch Code</label>
+                <input
+                  type="text"
+                  name="branchCode"
+                  value={formData.branchCode}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Enter branch code"
                 />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Lease Start Date</label>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
                 />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Lease End Date</label>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Lease Term (Months)</label>
+                <input
+                  type="number"
+                  name="months"
+                  value={formData.months}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  placeholder="Number of months"
                 />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Additional Clauses (Optional)</label>
-                <textarea 
+                <textarea
                   name="additionalClauses"
                   value={formData.additionalClauses}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green" 
-                  rows="4" 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green"
+                  rows="4"
                   placeholder="Enter any special terms or conditions"
                 ></textarea>
               </div>
